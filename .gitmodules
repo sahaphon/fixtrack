@@ -1,0 +1,6 @@
+[submodule "src/components"]
+	path = src/components
+	url = git@bitbucket.org:addait/components.git
+[submodule "src/utilities"]
+	path = src/utilities
+	url = git@bitbucket.org:addait/utilities.git
