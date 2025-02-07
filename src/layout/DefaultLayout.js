@@ -1,9 +1,17 @@
 import React from 'react'
-import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
+import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components-main/index'
+import { Helmet } from 'react-helmet'
 
+const PROGRAM = 'online'
 const DefaultLayout = () => {
     return (
         <div>
+            <Helmet>
+                {/* <title>
+                    {PROGRAM.toUpperCase()} {store.helmet && `- ${store.helmet}`}
+                </title> */}
+                <title>{PROGRAM.toUpperCase()}</title>
+            </Helmet>
             <AppSidebar />
             <div className="wrapper d-flex flex-column min-vh-100">
                 <AppHeader />

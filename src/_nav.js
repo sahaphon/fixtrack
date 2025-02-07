@@ -466,7 +466,7 @@ const _nav = [
     {
         component: CNavItem,
         name: 'Colors',
-        to: '/theme/colors',
+        to: '/',
         icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
     },
     {
@@ -476,18 +476,18 @@ const _nav = [
     {
         component: CNavGroup,
         name: 'Base',
-        to: '/base',
+        to: '/',
         icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
         items: [
             {
                 component: CNavItem,
                 name: 'Accordion',
-                to: '/base/accordion',
+                to: '/dashboard',
             },
             {
                 component: CNavItem,
                 name: 'Breadcrumb',
-                to: '/base/breadcrumbs',
+                to: '/dashboard',
             },
             {
                 component: CNavItem,

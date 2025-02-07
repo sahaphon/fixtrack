@@ -1,64 +1,90 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import {
-  CCloseButton,
-  CSidebar,
-  CSidebarBrand,
-  CSidebarFooter,
-  CSidebarHeader,
-  CSidebarToggler,
+    CCloseButton,
+    CSidebar,
+    CSidebarBrand,
+    CSidebarFooter,
+    CSidebarHeader,
+    CSidebarToggler,
+    CImage,
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
 
 import { AppSidebarNav } from './AppSidebarNav'
 
-import { logo } from 'src/assets/brand/logo'
-import { sygnet } from 'src/assets/brand/sygnet'
-
-// sidebar nav config
+import logo from '../../src/assets/images/logo-online.png'
+import sygnet from '../../src/assets/images/logo-online-small.png'
 import navigation from '../_nav'
+import mapNavFuntion from './Nav'
 
 const AppSidebar = () => {
-  const dispatch = useDispatch()
-  const unfoldable = useSelector((state) => state.sidebarUnfoldable)
-  const sidebarShow = useSelector((state) => state.sidebarShow)
+    const dispatch = useDispatch()
+    const unfoldable = useSelector((state) => state.sidebarUnfoldable)
+    const sidebarShow = useSelector((state) => state.sidebarShow)
+    const [navigations, setNavigations] = useState([])
 
-  return (
-    <CSidebar
-      className="border-end"
-      colorScheme="dark"
-      position="fixed"
-      narrow={!unfoldable ? true : false}
-      visible={sidebarShow}
-      onVisibleChange={(visible) => {
-        dispatch({ type: 'set', sidebarShow: visible })
-      }}
-    >
-      <CSidebarHeader className="border-bottom">
-        <CSidebarBrand to="/">
-          <CIcon customClassName="sidebar-brand-full" icon={logo} height={32} />
-          <CIcon customClassName="sidebar-brand-narrow" icon={sygnet} height={32} />
-        </CSidebarBrand>
-        <CCloseButton
-          className="d-lg-none"
-          dark
-          onClick={() => dispatch({ type: 'set', sidebarShow: false })}
-        />
-      </CSidebarHeader>
-      <AppSidebarNav items={navigation} />
-      <CSidebarFooter className="border-top d-none d-lg-flex">
-        <CSidebarToggler
-          onClick={() =>
-            dispatch({
-              type: 'set',
-              sidebarUnfoldable: !unfoldable,
-            })
-          }
-        />
-      </CSidebarFooter>
-    </CSidebar>
-  )
+    useEffect(() => {
+        loadData()
+        // if (Cookies.get(MASTER)) {
+        // }
+    }, [])
+
+    const loadData = async () => {
+        // const nav = await fetch('post', '/menus/nav/', {
+        //   user_id: Cookies.get(MASTER),
+        // })
+        // if (nav) {
+        //   const newNav = mapNavFuntion(nav)
+        //   setNavigation(newNav)
+        // }
+        const newNav = mapNavFuntion(navigation)
+        console.log('navigation', navigation)
+
+        console.log('newNav', newNav)
+        setNavigations(newNav)
+    }
+
+    return (
+        <CSidebar
+            className="border-end"
+            colorScheme="dark"
+            position="fixed"
+            narrow={!unfoldable ? true : false}
+            visible={sidebarShow}
+            onVisibleChange={(visible) => {
+                dispatch({ type: 'set', sidebarShow: visible })
+            }}
+        >
+            <CSidebarHeader className="border-bottom">
+                <CSidebarBrand className="d-none d-md-flex" to="/">
+                    <CImage src={logo} className="sidebar-brand-full" alt="MASTER" height={40} />
+                    <CImage
+                        src={sygnet}
+                        className="sidebar-brand-narrow"
+                        alt="MASTER"
+                        height={35}
+                    />
+                </CSidebarBrand>
+                <CCloseButton
+                    className="d-lg-none"
+                    dark
+                    onClick={() => dispatch({ type: 'set', sidebarShow: false })}
+                />
+            </CSidebarHeader>
+            <AppSidebarNav items={navigation} />
+            <CSidebarFooter className="border-top d-none d-lg-flex">
+                <CSidebarToggler
+                    onClick={() =>
+                        dispatch({
+                            type: 'set',
+                            sidebarUnfoldable: !unfoldable,
+                        })
+                    }
+                />
+            </CSidebarFooter>
+        </CSidebar>
+    )
 }
 
 export default React.memo(AppSidebar)

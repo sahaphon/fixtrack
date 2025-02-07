@@ -1,52 +1,149 @@
-import React, { Suspense, useEffect } from 'react'
-import { HashRouter, Route, Routes } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import React, { Suspense, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+    HashRouter,
+    Route,
+    Routes,
+    createBrowserRouter,
+    Navigate,
+    RouterProvider,
+} from 'react-router-dom'
 
 import { CSpinner, useColorModes } from '@coreui/react'
 import './scss/style.scss'
-import './scss/examples.scss'
+import routes from './routes'
+import Cookies from 'js-cookie'
+import { MASTER, TOKEN, PROGRAM, getPermission } from './config'
+import { alertPermissionDeny } from './components/Alert/Alert'
 
-const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
+const DefaultLayout = React.lazy(() => import('./components/layout/Layout'))
 
 // Pages
 const Login = React.lazy(() => import('./views/pages/login/Login'))
 const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Home = React.lazy(() => import('./views/Home/Home'))
 
+export const ProtectedRoute = ({ children }) => {
+    if (!Cookies.get(MASTER)) {
+        return <Navigate replace to="/login" />
+    }
+    return children
+}
+
 const App = () => {
-    const { isColorModeSet, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
-    const storedTheme = useSelector((state) => state.theme)
+    const dispatch = useDispatch()
+    const [os, setOs] = useState('')
+
+    const createRoute = () => {
+        const _router = routes
+            .filter((f) => !!f.element)
+            .map((route, idx) => {
+                return {
+                    key: idx,
+                    path: route.path.slice(1),
+                    name: route.name,
+                    Component: route.element,
+                    loader: async () => {
+                        try {
+                            const preload = route.loader ?? {}
+                            const permission =
+                                route.menu === 'home'
+                                    ? {
+                                          open: true,
+                                          view: true,
+                                          add: true,
+                                          edit: true,
+                                          delete: true,
+                                          print: true,
+                                          confirm: true,
+                                      }
+                                    : await getPermission(route.menu).catch((c) => {
+                                          console.log(c)
+                                          return false
+                                      })
+                            dispatch({ type: 'set', helmet: route.name })
+
+                            if (permission) {
+                                if (!permission.open) {
+                                    alertPermissionDeny(() => {
+                                        // console.log('deny')
+                                        // TODO:
+                                        window.location.replace(`/${PROGRAM}/home`)
+                                    })
+                                    return { permission: false, ...preload }
+                                }
+                            }
+                            return { permission, ...preload }
+                        } catch (e) {
+                            console.log('error loading route', e)
+                            throw e
+                        }
+                    },
+                    // errorElement: <Page404 />,
+                    ErrorBoundary: (e) => {
+                        console.log('error : => ', e)
+                    },
+                }
+            })
+
+        return createBrowserRouter(
+            [
+                {
+                    path: 'login',
+                    name: 'Login Page',
+                    element: <Login loadedRoute={setLoadedRoute} />,
+                },
+                // TODO: Line
+                // {
+                //     path: "line-discount/register",
+                //     name: "Line Register Page",
+                //     element: <LineRegister />,
+                // },
+                {
+                    path: '/',
+                    name: 'Home',
+                    element: (
+                        <ProtectedRoute>
+                            <DefaultLayout />
+                        </ProtectedRoute>
+                    ),
+                    // children: _router,
+                    children: (Cookies.get(MASTER) ? _router : []).concat({
+                        key: 'p404',
+                        path: '*',
+                        element: <Page404 />,
+                    }),
+                    ErrorBoundary: (e) => {
+                        console.log('err', e)
+                    },
+                    // errorElement: <Page404 />,
+                },
+            ],
+            { basename: '/' + PROGRAM },
+        )
+    }
+
+    const [loadedRoute, setLoadedRoute] = useState(false)
+    const [routeState, setRouteState] = useState(createRoute())
 
     useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.href.split('?')[1])
-        const theme = urlParams.get('theme') && urlParams.get('theme').match(/^[A-Za-z0-9\s]+/)[0]
-        if (theme) {
-            setColorMode(theme)
-        }
+        if (!loadedRoute) return
+        const temp = createRoute()
 
-        if (isColorModeSet()) {
-            return
-        }
-
-        setColorMode(storedTheme)
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+        setRouteState(temp)
+        setLoadedRoute(false)
+    }, [loadedRoute, os])
 
     return (
-        <HashRouter>
-            <Suspense
-                fallback={
-                    <div className="pt-3 text-center">
-                        <CSpinner color="primary" variant="grow" />
-                    </div>
-                }
-            >
-                <Routes>
-                    <Route exact path="/login" name="Login Page" element={<Login />} />
-                    <Route exact path="/" name="Home" element={<DefaultLayout />} />
-                    <Route path="*" name="Page 404" element={<Page404 />} />
-                </Routes>
-            </Suspense>
-        </HashRouter>
+        <React.Suspense
+            fallback={
+                <div className="pt-3 text-center">
+                    <CSpinner color="primary" variant="grow" />
+                </div>
+            }
+        >
+            <RouterProvider router={routeState} />
+        </React.Suspense>
     )
 }
 

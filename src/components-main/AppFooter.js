@@ -1,23 +1,26 @@
 import React from 'react'
 import { CFooter } from '@coreui/react'
 
-const AppFooter = () => {
-  return (
-    <CFooter className="px-4">
-      <div>
-        <a href="https://coreui.io" target="_blank" rel="noopener noreferrer">
-          CoreUI
-        </a>
-        <span className="ms-1">&copy; 2024 creativeLabs.</span>
-      </div>
-      <div className="ms-auto">
-        <span className="me-1">Powered by</span>
-        <a href="https://coreui.io/react" target="_blank" rel="noopener noreferrer">
-          CoreUI React Admin &amp; Dashboard Template
-        </a>
-      </div>
-    </CFooter>
-  )
+const AppFooter = ({ userID, lastLogin }) => {
+    return (
+        <CFooter className="px-4">
+            <div>
+                <span style={{ fontWeight: 'bold' }}>Login : </span>
+                <span>{userID}</span> &nbsp;&nbsp;
+                <span className="ml-1" style={{ fontWeight: 'bold' }}>
+                    เข้าสู่ระบบล่าสุด :{' '}
+                </span>
+                <span>{lastLogin}</span>
+            </div>
+            <div className="ms-auto">
+                <span className="ml-1" style={{ fontWeight: 'bold' }}>
+                    Ver. 0.0.0 {/* Ver. {version} */}
+                </span>
+                &nbsp;
+                <span className="mr-1">Powered by IT ADDA &copy; 2025</span>
+            </div>
+        </CFooter>
+    )
 }
 
 export default React.memo(AppFooter)

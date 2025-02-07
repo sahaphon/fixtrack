@@ -1,0 +1,9 @@
+.overlay-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    overflow: hidden;
+    border-radius: 8px;
+    height:calc( 100vh  - 130px );
+  }

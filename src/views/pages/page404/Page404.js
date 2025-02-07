@@ -11,11 +11,14 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilMagnifyingGlass, cilArrowCircleLeft } from '@coreui/icons'
+import { ArrowLeftOutlined } from '@ant-design/icons'
+import { THEME_PROGRAM } from '../../../config'
+import './Page404.css'
 
 const Page404 = () => {
     const Navigate = useNavigate()
     return (
-        <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
+        <div className="overlay-page">
             <CContainer>
                 <CRow className="justify-content-center">
                     <CCol md={6}>
@@ -39,15 +42,19 @@ const Page404 = () => {
                             <u
                                 style={{
                                     cursor: 'pointer',
-                                    color: '#1d39c4',
+                                    fontWeight: 'bold',
+                                    color: THEME_PROGRAM,
                                     fontSize: '16px',
                                     marginLeft: '-10px',
                                 }}
                                 onClick={() => Navigate(`/`)}
                             >
-                                <CIcon
-                                    icon={cilArrowCircleLeft}
-                                    style={{ display: 'inline-grid', marginRight: '10px' }}
+                                <ArrowLeftOutlined
+                                    style={{
+                                        display: 'inline-grid',
+                                        marginRight: '8px',
+                                        fontSize: '16px',
+                                    }}
                                 />
                                 <span>{`กลับหน้าหลัก`}</span>
                             </u>

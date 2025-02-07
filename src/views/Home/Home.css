@@ -1,0 +1,41 @@
+.overlay-page {
+    background:#FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    overflow: hidden;
+    border-radius: 8px;
+    height:calc( 100vh  - 130px );
+  }
+
+.four_bg{
+    height:380px; 
+    width: 600px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    background-position: center;
+    text-align: center;
+ }
+ 
+ .four_bg h1{
+    font-size:80px;
+ }
+ 
+.four_bg h3{
+    font-size:80px;
+}
+    
+.contant_box_404{ 
+    margin-top:-55px;
+}
+
+.four_bg_mini{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height:250px; 
+    width: 320px;
+    background-position: center;
+}

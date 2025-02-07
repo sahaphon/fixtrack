@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
     CAvatar,
     CBadge,
@@ -24,7 +25,16 @@ import CIcon from '@coreui/icons-react'
 
 import avatar8 from './../../assets/images/avatars/8.jpg'
 
-const AppHeaderDropdown = () => {
+const AppHeaderDropdown = ({ userID }) => {
+    const navigate = useNavigate()
+    // const dispatch = useDispatch()
+    // const isAdmin = useSelector((store) => store.admin)
+
+    const logOut = () => {
+        // removeCookie()
+        navigate('/login')
+    }
+
     return (
         <CDropdown variant="nav-item">
             <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
@@ -55,7 +65,7 @@ const AppHeaderDropdown = () => {
                     เปลี่ยนรหัสผ่าน
                 </CDropdownItem>
                 <CDropdownDivider />
-                <CDropdownItem href="#">
+                <CDropdownItem onClick={logOut}>
                     <CIcon icon={cilLockLocked} className="me-2" />
                     ออกจากระบบ
                 </CDropdownItem>

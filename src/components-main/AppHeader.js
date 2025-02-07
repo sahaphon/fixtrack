@@ -27,13 +27,13 @@ const AppHeader = () => {
     const sidebarShow = useSelector((state) => state.sidebarShow)
 
     useEffect(() => {
-        document.addEventListener('scroll', () => {
-            headerRef.current &&
-                headerRef.current.classList.toggle(
-                    'shadow-sm',
-                    document.documentElement.scrollTop > 0,
-                )
-        })
+        // document.addEventListener('scroll', () => {
+        //     headerRef.current &&
+        //         headerRef.current.classList.toggle(
+        //             'shadow-sm',
+        //             document.documentElement.scrollTop > 0,
+        //         )
+        // })
     }, [])
 
     return (
