@@ -79,23 +79,23 @@ const FileSystemDetail = () => {
             width: 300,
             render: (text, record, index) => text,
         },
-        {
-            title: () => <div className="font-weight-bold">เปิดใช้งาน</div>,
-            dataIndex: 'open_count',
-            key: 'open_count',
-            width: 100,
-            align: 'center',
-            render: (text, record, index) => numeral(text).format('0,0'),
-        },
-        {
-            title: () => <div className="font-weight-bold">เข้าใช้ล่าสุด</div>,
-            dataIndex: 'last_login',
-            key: 'last_login',
-            width: 150,
-            align: 'center',
-            render: (text, record, index) =>
-                text ? moment.utc(text).format('DD/MM/YYYY HH:mm') : null,
-        },
+        // {
+        //     title: () => <div className="font-weight-bold">เปิดใช้งาน</div>,
+        //     dataIndex: 'open_count',
+        //     key: 'open_count',
+        //     width: 100,
+        //     align: 'center',
+        //     render: (text, record, index) => numeral(text).format('0,0'),
+        // },
+        // {
+        //     title: () => <div className="font-weight-bold">เข้าใช้ล่าสุด</div>,
+        //     dataIndex: 'last_login',
+        //     key: 'last_login',
+        //     width: 150,
+        //     align: 'center',
+        //     render: (text, record, index) =>
+        //         text ? moment.utc(text).format('DD/MM/YYYY HH:mm') : null,
+        // },
         {
             title: () => {
                 return (
@@ -373,8 +373,9 @@ const FileSystemDetail = () => {
 
     const defaultUsers = async () => {
         setLoadingTable(true)
-        const data = await getAllUser()
+        let data = await getAllUser()
         if (data !== undefined) {
+            data = Array.isArray(data) ? data : [data]
             const result = data.map((value) => {
                 return {
                     ...value,
@@ -409,7 +410,6 @@ const FileSystemDetail = () => {
                 data.users.map((item) => ({
                     ...item,
                     full_name: item.name_eng + '  ' + item.surname_eng,
-                    emp_id: item.user_id,
                 })),
             )
         }

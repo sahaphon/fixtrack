@@ -4,17 +4,17 @@ import Cookies from 'js-cookie'
 
 const ServiceUser = () => {
     const getAllUser = async () => {
-        const res = await fetch('GET', '/users/')
+        const res = await fetch('POST', '/users/get_all')
         return res
     }
 
     const getUser = async ({ type_search, offset, limit, search }) => {
-        const res = await fetch('POST', '/users/get', { type_search, offset, limit, search })
+        const res = await fetch('POST', '/users/', { type_search, offset, limit, search })
         return res
     }
 
     const getUserDetail = async (emp_id) => {
-        const res = await fetch('GET', `/users/${emp_id}`)
+        const res = await fetch('POST', `/users/get`, { emp_id })
         return res
     }
 

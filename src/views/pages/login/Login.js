@@ -103,7 +103,7 @@ const Login = ({ loadedRoute }) => {
                                                 fontSize: '17px',
                                             }}
                                         >
-                                            PLATFORM ONLINE
+                                            OEE
                                         </b>
                                     </Form.Item>
                                     <Form.Item

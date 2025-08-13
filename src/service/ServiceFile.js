@@ -9,17 +9,17 @@ const ServiceFile = () => {
     }
 
     const getAllMenu = async () => {
-        const res = await fetch('GET', '/menus/')
+        const res = await fetch('POST', '/menus/get_all')
         return res
     }
 
-    const getMenu = async ({ offset, limit, search }) => {
-        const res = await fetch('POST', '/menus/get', { offset, limit, search })
+    const getMenu = async ({ type_search, offset, limit, search }) => {
+        const res = await fetch('POST', '/menus/', { type_search, offset, limit, search })
         return res
     }
 
     const getMenuDetail = async (menu_id) => {
-        const res = await fetch('GET', `/menus/${menu_id}`)
+        const res = await fetch('POST', `/menus/get`, { menu_id })
         return res
     }
 

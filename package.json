@@ -1,15 +1,8 @@
 {
-  "name": "adda-platform-online",
+  "name": "OEE",
   "version": "1.0.0",
-  "description": "adda-platform-online",
-  "homepage": "online",
-  "bugs": {
-    "url": "https://github.com/coreui/coreui-free-react-admin-template/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:coreui/coreui-free-react-admin-template.git"
-  },
+  "description": "OEE",
+  "homepage": "oee",
   "license": "MIT",
   "author": {
     "name": "ADDA",

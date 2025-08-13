@@ -6,7 +6,7 @@ const User = React.lazy(() => import('./views/User/User'))
 const UserDetail = React.lazy(() => import('./views/User/UserDetail'))
 const FileSystem = React.lazy(() => import('./views/FileSystem/FileSystem'))
 const FileSystemDetail = React.lazy(() => import('./views/FileSystem/FileSystemDetail'))
-const DailySale = React.lazy(() => import('./views/DailySale/DailySale'))
+const EVATable = React.lazy(() => import('./views/Eva/Eva'))
 
 const routes = [
     { path: '/', name: 'Home', element: Home, menu: 'home' },
@@ -77,11 +77,11 @@ const routes = [
         typeForm: 'view',
     },
     {
-        path: '/accounting/daily-sales',
-        name: 'DailySale',
-        element: DailySale,
+        path: '/eva',
+        name: 'EVA',
+        element: EVATable,
         exact: true,
-        menu: 'M001',
+        menu: 'M002',
     },
 ]
 

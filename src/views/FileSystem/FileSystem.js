@@ -79,6 +79,7 @@ const FileSystem = () => {
             offset: offset,
             limit: limit,
             search: search,
+            type_search: type,
         })
 
         if (res !== undefined) {

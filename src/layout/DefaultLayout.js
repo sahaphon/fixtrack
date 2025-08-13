@@ -1,8 +1,8 @@
 import React from 'react'
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components-main/index'
 import { Helmet } from 'react-helmet'
+import { PROGRAM } from '../config'
 
-const PROGRAM = 'online'
 const DefaultLayout = () => {
     return (
         <div>
