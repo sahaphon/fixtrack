@@ -1,5 +1,5 @@
 .hide-scrollbar::-webkit-scrollbar {
-    display: none !important;
+  display: none !important;
 }
 .ant-table.ant-table-small .ant-table-title,
 .ant-table.ant-table-small .ant-table-footer,
@@ -7,32 +7,32 @@
 .ant-table.ant-table-small .ant-table-tbody > tr > td,
 .ant-table.ant-table-small tfoot > tr > th,
 .ant-table.ant-table-small tfoot > tr > td {
-    padding: 3px 3px;
-    font-size: smaller;
+  padding: 3px 3px;
+  font-size: smaller;
 }
 
 .ant-table-tbody > tr.ant-table-row:hover > td {
-    background: #e6f4ff !important;
+  background: #e6f4ff !important;
 }
 
 .blueLight > td {
-    background-color: #e6f4ff !important;
+  background-color: #e6f4ff !important;
 }
 
 .ant-table-thead > tr > th {
-    text-align: center !important;
+  text-align: center !important;
 }
 
 .ant-table table {
-    font-size: 17px;
+  font-size: 17px;
 }
 
 .ant-modal-content {
-    border-radius: 20px;
+  border-radius: 20px;
 }
 
 .ant-modal-header {
-    border-radius: 20px;
+  border-radius: 20px;
 }
 
 .ant-input,
@@ -40,30 +40,30 @@
 .ant-dropdown,
 .ant-select-selection-search-input,
 .ant-picker-input > input {
-    border-radius: 6px;
+  border-radius: 6px;
 }
 
 .ant-input-number,
 .num-right > div > input {
-    text-align: right !important;
+  text-align: right !important;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .ant-form-item {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 label:has(.ant-radio, .ant-wave-target, .ant-radio-disabled) > span,
 .ant-picker-disabled > .ant-picker-input > input,
 .ant-input-number-disabled > div > input,
 label:has(.ant-radio-button-disabled) > span {
-    color: black !important;
-    accent-color: black !important;
+  color: black !important;
+  accent-color: black !important;
 }
 
 .ant-input-disabled,
@@ -75,14 +75,14 @@ textarea:disabled,
 .ant-select-disabled > .ant-select-selector > .ant-select-selection-item,
 .ant-select-disabled > .ant-select-selector:has(span),
 .ant-select-disabled > .ant-select-selector > .ant-select-selection-overflow > div > span {
-    color: black !important;
-    accent-color: black !important;
-    background-color: rgb(240, 240, 240) !important;
-    cursor: not-allowed;
+  color: black !important;
+  accent-color: black !important;
+  background-color: rgb(240, 240, 240) !important;
+  cursor: not-allowed;
 }
 
 input[type='number'] {
-    text-align: right !important;
+  text-align: right !important;
 }
 
 /* .cus-signature {

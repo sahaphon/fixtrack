@@ -1,9 +1,22 @@
 import Cookies from 'js-cookie'
 import { fetch } from './fetch'
 
-// TODO:
 const PROGRAM = 'oee'
 const URLS = {
+  SERVER: {
+    BASE_URL: 'https://app.adda.co.th/oee-api/api',
+    SOCKET_PATH: {
+      url: 'https://app.adda.co.th',
+      path: '/oee-api/socket.io/',
+    },
+  },
+  SERVER60: {
+    BASE_URL: 'http://10.32.0.60/oee-api/api',
+    SOCKET_PATH: {
+      url: 'http://10.32.0.60',
+      path: '/oee-api/socket.io/',
+    },
+  },
   PRODUCTION: {
     BASE_URL: '/oee-api/api',
     SOCKET_PATH: {
