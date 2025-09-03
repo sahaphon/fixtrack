@@ -10,9 +10,21 @@
   padding: 3px 3px;
   font-size: smaller;
 }
+.ant-table-thead > tr > th {
+  font-size: small;
+  height: 10px; /* Adjust as needed */
+  padding: 3px; /* Adjust padding to fit content within the new height */
+}
+
+.ant-table-tbody > tr > td {
+  font-size: small;
+  height: 10px; /* Adjust as needed */
+  margin: 0;
+  padding: 3px !important ; /* Adjust padding to fit content within the new height */
+}
 
 .ant-table-tbody > tr.ant-table-row:hover > td {
-  background: #e6f4ff !important;
+  background: #e6f4ff;
 }
 
 .blueLight > td {

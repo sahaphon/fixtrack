@@ -1,9 +1,20 @@
-import { Card, Col, DatePicker, Form, Row, Select, Table } from 'antd'
+import { Card, Col, DatePicker, Form, Row, Select, Table, Tooltip } from 'antd'
 import React, { useState, useEffect, useRef } from 'react'
 import serviceEva from '../../service/ServiceEva'
 import { useLocation } from 'react-router-dom'
 import moment from 'moment'
 import dayjs from 'dayjs'
+
+const lost_topic = [
+  'แก้เม็ด',
+  'รอเม็ด',
+  'ปิดเครื่อง',
+  'เปลี่ยนเม็ด',
+  'ซ่อมเครื่อง',
+  'ซ่อมโมลด์',
+  'เปลี่ยนโมลด์',
+  'ฉีดเก็บSize',
+]
 
 const EVADetail = () => {
   const location = useLocation()
@@ -29,6 +40,16 @@ const EVADetail = () => {
       key: 'topic',
       width: 30,
       align: 'center',
+      render: (text, record) => {
+        // Conditionally highlight the cell based on the 'amount' value
+
+        return {
+          props: {
+            style: {},
+          },
+          children: <div>{text}</div>,
+        }
+      },
     },
   ]
   for (let i = 0; i < 12; i++) {
@@ -36,12 +57,45 @@ const EVADetail = () => {
       title: () => (
         <label
           style={{ fontWeight: 'bold' }}
-        >{`${start_date.add(1, 'hours').format('HH:mm')}-${end_date.add(1, 'hours').format('HH:mm')}`}</label>
+        >{`${start_date.add(1, 'hours').format('HH:mm')} - ${end_date.add(1, 'hours').format('HH:mm')}`}</label>
       ),
       dataIndex: `${i}`,
       key: `${i}`,
       width: 30,
       align: 'center',
+      render: (text, record) => {
+        // Conditionally highlight the cell based on the 'amount' value
+        const cellStyle = {
+          background: 'rgb(221.7, 90.3, 90.3)',
+        }
+        let colSpan = 1
+        for (let j = i + 1; j < 12; j++) {
+          if (record[i] == record[j]) {
+            colSpan++
+          }
+        }
+        if (record[i] == record[i - 1]) {
+          colSpan = 0
+        }
+        return lost_topic.includes(record.topic)
+          ? {
+              props: {
+                style: text ? cellStyle : {},
+                colSpan: text ? colSpan : 1,
+              },
+              children: (
+                <Tooltip placement="top" title={'3 นาที'}>
+                  <div style={{ color: '#080a0c' }}>{text}</div>
+                </Tooltip>
+              ),
+            }
+          : {
+              props: {
+                style: {},
+              },
+              children: <div>{text}</div>,
+            }
+      },
     })
   }
   columns.push({
@@ -50,12 +104,37 @@ const EVADetail = () => {
     key: `total`,
     width: 30,
     align: 'center',
+    render: (text, record) => {
+      // Conditionally highlight the cell based on the 'amount' value
+
+      return {
+        props: {
+          style: {},
+        },
+        children: <div>{text}</div>,
+      }
+    },
   })
 
   const handleLoadData = async () => {
     setIsLoading(true)
     const res = await getDetail({ machine, shift, date: date.format('DD/MM/YYYY') })
-    setDataTable(res.map((e) => ({ ...e, key: e.topic })))
+    const _data = res.map((e) => ({ ...e, key: e.topic }))
+    if (machine === 'D2') {
+      for (let i = 0; i < _data.length; i++) {
+        if (_data[i].topic === 'ซ่อมโมลด์') {
+          _data[i][0] = 'ซ่อมโมลด์ 9/1'
+          _data[i][1] = 'ซ่อมโมลด์ 9/1'
+          _data[i][2] = 'ซ่อมโมลด์ 9/1'
+          _data[i][3] = 'ซ่อมโมลด์ 9/1'
+        }
+        if (_data[i].topic === 'เปลี่ยนโมลด์') {
+          _data[i][2] = 'เปลี่ยนโมลด์ 7/1'
+          _data[i][7] = 'เปลี่ยนโมลด์ 9/1'
+        }
+      }
+    }
+    setDataTable(_data)
     setIsLoading(false)
   }
 
@@ -77,7 +156,8 @@ const EVADetail = () => {
       <Card style={{ borderRadius: 5 }}>
         <div style={{ marginBottom: 20 }}>
           <Form>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexDirection: 'row' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 20, flexDirection: 'row' }}>
+              <div>เครื่องฉีด Eva</div>
               <Form.Item label="เครื่องจักร">
                 <Select
                   value={machine}

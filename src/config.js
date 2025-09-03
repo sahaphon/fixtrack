@@ -33,7 +33,7 @@ const URLS = {
   },
 }
 
-const selected_url = process.env.NODE_ENV === 'production' ? URLS.PRODUCTION : URLS.LOCAL
+const selected_url = process.env.NODE_ENV === 'production' ? URLS.PRODUCTION : URLS.SERVER60
 
 const BASE_URL = selected_url.BASE_URL
 const IMAGE_URL = URLS.IMAGE_URL
@@ -49,7 +49,7 @@ const DATE_FORMAT = {
   DISPLAY: 'DD/MM/YYYY',
   DISPLAY_DATE_TIME: 'DD/MM/YYYY HH:mm:ss',
 }
-// "react-router-dom": "^6.28.0",
+
 const NUM_FORMAT = {
   D0: '0,0',
   D1: '0,0.0',

@@ -86,7 +86,7 @@ const routes = [
   },
   {
     path: '/eva/detail',
-    name: 'EVA',
+    name: 'รายละเอียดข้อมูล EVA',
     element: EVADetail,
     exact: true,
     menu: 'M002',
