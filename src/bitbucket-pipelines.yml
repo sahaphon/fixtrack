@@ -1,0 +1,9 @@
+pipelines:
+  branches:
+    master:
+      - step:
+          name: Trigger Jenkins Build
+          script:
+            - >
+              curl -k -X POST https://service.adda.co.th/jenkins/job/OEE/build \
+               --user "$JENKINS_USER:$JENKINS_TOKEN"

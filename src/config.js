@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 import { fetch } from './fetch'
 
-const PROGRAM = 'oee'
+const PROGRAM = 'OEE'
 const URLS = {
   SERVER: {
     BASE_URL: 'https://app.adda.co.th/oee-api/api',
@@ -33,7 +33,7 @@ const URLS = {
   },
 }
 
-const selected_url = process.env.NODE_ENV === 'production' ? URLS.PRODUCTION : URLS.SERVER60
+const selected_url = process.env.NODE_ENV === 'production' ? URLS.PRODUCTION : URLS.LOCAL
 
 const BASE_URL = selected_url.BASE_URL
 const IMAGE_URL = URLS.IMAGE_URL
