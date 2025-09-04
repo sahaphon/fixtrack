@@ -45,16 +45,9 @@ const routes = [
     menu: 'M001',
     typeForm: 'view',
   },
-  { path: '/file', name: 'ข้อมูลระบบงาน', element: FileSystem, exact: true, menu: 'M001' },
+  { path: '/menu', name: 'ข้อมูลระบบงาน', element: FileSystem, exact: true, menu: 'M001' },
   {
-    path: '/file',
-    name: 'ข้อมูลระบบงาน',
-    element: FileSystemDetail,
-    exact: true,
-    menu: 'M001',
-  },
-  {
-    path: '/file/add',
+    path: '/menu/add',
     name: 'เพิ่มข้อมูลระบบงาน',
     element: FileSystemDetail,
     exact: true,
@@ -62,7 +55,7 @@ const routes = [
     typeForm: 'add',
   },
   {
-    path: '/file/edit',
+    path: '/menu/edit',
     name: 'แก้ไขข้อมูลระบบงาน',
     element: FileSystemDetail,
     exact: true,
@@ -70,7 +63,7 @@ const routes = [
     typeForm: 'edit',
   },
   {
-    path: '/file/view',
+    path: '/menu/view',
     name: 'รายละเอียดข้อมูลระบบงาน',
     element: FileSystemDetail,
     exact: true,

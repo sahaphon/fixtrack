@@ -120,20 +120,6 @@ const EVADetail = () => {
     setIsLoading(true)
     const res = await getDetail({ machine, shift, date: date.format('DD/MM/YYYY') })
     const _data = res.map((e) => ({ ...e, key: e.topic }))
-    if (machine === 'D2') {
-      for (let i = 0; i < _data.length; i++) {
-        if (_data[i].topic === 'ซ่อมโมลด์') {
-          _data[i][0] = 'ซ่อมโมลด์ 9/1'
-          _data[i][1] = 'ซ่อมโมลด์ 9/1'
-          _data[i][2] = 'ซ่อมโมลด์ 9/1'
-          _data[i][3] = 'ซ่อมโมลด์ 9/1'
-        }
-        if (_data[i].topic === 'เปลี่ยนโมลด์') {
-          _data[i][2] = 'เปลี่ยนโมลด์ 7/1'
-          _data[i][7] = 'เปลี่ยนโมลด์ 9/1'
-        }
-      }
-    }
     setDataTable(_data)
     setIsLoading(false)
   }

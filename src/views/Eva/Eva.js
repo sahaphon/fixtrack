@@ -122,18 +122,16 @@ const EVATable = () => {
         return {
           ...value,
           key: value.machine + value.data_date + value.shift,
-          performance: numeral((value.qty * 100) / (value.hours * 72)).format('0.00') + '%',
-          quality:
-            numeral(((value.qty * 2 - value.waste_qty) * 100) / (value.qty * 2)).format('0.00') +
-            '%',
+          performance: numeral((value.qty * 100) / (value.hours * 144)).format('0.00') + '%',
+          quality: numeral(((value.qty - value.waste_qty) * 100) / value.qty).format('0.00') + '%',
           availability:
             numeral(
               (value.run_time * 100) / (value.run_time + value.lost_time + value.down_time),
             ).format('0.00') + '%',
           oee:
             numeral(
-              (value.qty / (value.hours * 72)) *
-                ((value.qty * 2 - value.waste_qty) / (value.qty * 2)) *
+              (value.qty / (value.hours * 144)) *
+                ((value.qty - value.waste_qty) / value.qty) *
                 (value.run_time / (value.run_time + value.lost_time + value.down_time)) *
                 100,
             ).format('0.00') + '%',

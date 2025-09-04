@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 import { fetch } from './fetch'
 
-const PROGRAM = 'OEE'
+const PROGRAM = 'oee'
 const URLS = {
   SERVER: {
     BASE_URL: 'https://app.adda.co.th/oee-api/api',
