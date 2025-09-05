@@ -21,7 +21,7 @@ const MachineCard = ({ machine, data }) => {
     if (data) {
       let _calData = {
         ...data,
-        a: (data.run_time / (data.run_time + data.down_time + data.lost_time)) * 100,
+        a: (data.run_time / data.hours / 60) * 100,
         p: (data.qty / (data.hours * 144)) * 100,
         q: ((data.qty - data.waste_qty) / data.qty) * 100,
         good: data.qty - data.waste_qty,
@@ -33,11 +33,13 @@ const MachineCard = ({ machine, data }) => {
   return (
     <>
       <Col
-        xs={{ span: expand ? 24 : 24 }}
-        sm={{ span: expand ? 24 : 24 }}
-        md={{ span: expand ? 24 : 12 }}
-        lg={{ span: expand ? 24 : 8 }}
-        xl={{ span: expand ? 12 : 6 }}
+        xs={{ span: 24 }}
+        sm={{ span: 24 }}
+        md={{ span: 12 }}
+        lg={{ span: 12 }}
+        xl={{ span: 8 }}
+        xxl={{ span: 6 }}
+        onClick={() => setExpand(!expand)}
       >
         <Card style={{ borderRadius: 5, background: 'transparent !important' }}>
           <Flex gap={'small'} align="center" direction="column" wrap>
@@ -46,7 +48,7 @@ const MachineCard = ({ machine, data }) => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                width: '90px',
+                width: '50px',
               }}
             >
               <div
@@ -74,6 +76,7 @@ const MachineCard = ({ machine, data }) => {
             <Progress
               type="dashboard"
               percent={calData.oee}
+              style={{ marginRight: 10 }}
               gapDegree={30}
               size="small"
               strokeColor={calData.oee > 70 ? '#B7EB8F' : '#FF4D4F'}
@@ -108,41 +111,43 @@ const MachineCard = ({ machine, data }) => {
                 />
               </div>
             </Flex>
-            <Flex gap="large">
-              <Flex
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'start',
-                  width: '90px',
-                }}
-              >
-                <div>เป้า: {calData.hours * 144 ?? 0}</div>
-                <div>ยอด:{calData.qty ?? 0}</div>
+            {expand && (
+              <Flex gap="large">
+                <Flex
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'start',
+                    width: '90px',
+                  }}
+                >
+                  <div>เป้า: {calData.hours * 144 ?? 0}</div>
+                  <div>ยอด:{calData.qty ?? 0}</div>
+                </Flex>
+                <Flex
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'start',
+                    width: '90px',
+                  }}
+                >
+                  <div>ของดี: {calData.good ?? 0}</div>
+                  <div>ยอดโอน:{calData.wip_qty ?? 0}</div>
+                </Flex>
+                <Flex
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'start',
+                    width: '90px',
+                  }}
+                >
+                  <div>ของเสีย: {calData.waste_qty ?? 0}</div>
+                  <div>ยอดโอน:{calData.waste_bar_qty ?? 0}</div>
+                </Flex>
               </Flex>
-              <Flex
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'start',
-                  width: '90px',
-                }}
-              >
-                <div>ของดี: {calData.good ?? 0}</div>
-                <div>ยอดโอน:{calData.wip_qty ?? 0}</div>
-              </Flex>
-              <Flex
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'start',
-                  width: '90px',
-                }}
-              >
-                <div>ของเสีย: {calData.waste_qty ?? 0}</div>
-                <div>ยอดโอน:{calData.waste_bar_qty ?? 0}</div>
-              </Flex>
-            </Flex>
+            )}
           </Flex>
         </Card>
       </Col>

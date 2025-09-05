@@ -21,7 +21,7 @@ const HeadCard = ({ name, data }) => {
     if (data) {
       let _calData = {
         ...data,
-        a: (data.run_time / (data.run_time + data.down_time + data.lost_time)) * 100,
+        a: (data.run_time / data.hours / 60) * 100,
         p: (data.qty / (data.hours * 144)) * 100,
         q: ((data.qty - data.waste_qty) / data.qty) * 100,
         good: data.qty - data.waste_qty,

@@ -16,6 +16,7 @@ import FilterComponent from '../../components/Table/Filter'
 import Btn from '../../components/Button/BtnComponent'
 import HeadCard from '../dashboard/HeadCard'
 import { start } from '@popperjs/core'
+import dayjs from 'dayjs'
 
 const LineCollapse = ({ line, line_data }) => {
   return (
@@ -37,7 +38,7 @@ const LineCollapse = ({ line, line_data }) => {
   )
 }
 
-const EVADashboard = () => {
+const EVADashboard = ({ filterDate }) => {
   const { getDashboard } = serviceEva()
   const { permission } = useLoaderData()
 
@@ -51,11 +52,18 @@ const EVADashboard = () => {
 
   useEffect(() => {
     loadData()
-  }, [])
+  }, [filterDate])
 
   const loadData = async () => {
     setIsLoading(true)
-    let data = await getDashboard({ filter: { date: ['2025-08-18', '2025-08-22'] } })
+    let data = await getDashboard({
+      filter: {
+        date: filterDate.map((e) => dayjs(e, 'DD/MM/YYYY').format('YYYY-MM-DD')) || [
+          '2025-08-18',
+          '2025-08-22',
+        ],
+      },
+    })
     setData(
       data.reduce(
         (acc, cur) => ({
@@ -120,16 +128,6 @@ const EVADashboard = () => {
                   <LineCollapse key={key} line={key} line_data={value} />
                 ))
               : null,
-            // extra: (
-            // <Btn.Filter
-            //   style={{ marginLeft: 'auto' }}
-            //   onClick={() => {
-            //     setFilterVisibility(true)
-            //   }}
-            // >
-            //   Filter
-            // </Btn.Filter>
-            // ),
           },
         ]}
       />
