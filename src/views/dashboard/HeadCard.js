@@ -22,7 +22,7 @@ const HeadCard = ({ name, data }) => {
       let _calData = {
         ...data,
         a: (data.run_time / data.hours / 60) * 100,
-        p: (data.qty / (data.hours * 144)) * 100,
+        p: (data.qty / (data.active_hours * 144)) * 100,
         q: ((data.qty - data.waste_qty) / data.qty) * 100,
         good: data.qty - data.waste_qty,
       }
@@ -62,7 +62,7 @@ const HeadCard = ({ name, data }) => {
         type="dashboard"
         percent={calData.oee}
         gapDegree={30}
-        size="small"
+        size={90}
         strokeColor={calData.oee > 70 ? '#B7EB8F' : '#FF4D4F'}
         format={(percent) => numeral(percent).format('0,0') + '%'}
       />
@@ -71,7 +71,7 @@ const HeadCard = ({ name, data }) => {
           A
           <Progress
             percent={calData.a}
-            size="small"
+            size={['default', 10]}
             strokeColor={calData.a > 90 ? '#B7EB8F' : '#FF4D4F'}
             format={(percent) => numeral(percent).format('0,0.00') + '%'}
           />
@@ -80,7 +80,7 @@ const HeadCard = ({ name, data }) => {
           P
           <Progress
             percent={calData.p}
-            size="small"
+            size={['default', 10]}
             strokeColor={calData.p > 80 ? '#B7EB8F' : '#FF4D4F'}
             format={(percent) => numeral(percent).format('0,0.00') + '%'}
           />
@@ -89,7 +89,7 @@ const HeadCard = ({ name, data }) => {
           Q
           <Progress
             percent={calData.q}
-            size="small"
+            size={['default', 10]}
             strokeColor={calData.q > 96 ? '#B7EB8F' : '#FF4D4F'}
             format={(percent) => numeral(percent).format('0,0.00') + '%'}
           />
@@ -104,7 +104,7 @@ const HeadCard = ({ name, data }) => {
             width: '90px',
           }}
         >
-          <div>เป้า: {calData.hours * 144 ?? 0}</div>
+          <div>เป้า: {calData.active_hours * 144 ?? 0}</div>
           <div>ยอด:{calData.qty ?? 0}</div>
         </Flex>
         <Flex

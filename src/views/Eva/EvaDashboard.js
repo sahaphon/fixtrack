@@ -25,6 +25,7 @@ const LineCollapse = ({ line, line_data }) => {
         {
           key: `EVA - ${line}`,
           label: <HeadCard name={`${line}`} data={line_data} />,
+          showArrow: false,
           children: line_data ? (
             <Row gutter={[16, 16]}>
               {line_data.machine_data.map((e) => (
@@ -69,6 +70,7 @@ const EVADashboard = ({ filterDate }) => {
         (acc, cur) => ({
           qty: (acc.qty || 0) + cur.qty,
           hours: (acc.hours || 0) + cur.hours,
+          active_hours: (acc.active_hours || 0) + cur.active_hours,
           waste_qty: (acc.waste_qty || 0) + cur.waste_qty,
           run_time: (acc.run_time || 0) + cur.run_time,
           lost_time: (acc.lost_time || 0) + cur.lost_time,
@@ -82,6 +84,7 @@ const EVADashboard = ({ filterDate }) => {
                 [cur.machine[0]]: {
                   qty: (acc.lineData[cur.machine[0]].qty || 0) + cur.qty,
                   hours: (acc.lineData[cur.machine[0]].hours || 0) + cur.hours,
+                  active_hours: (acc.lineData[cur.machine[0]].active_hours || 0) + cur.active_hours,
                   waste_qty: (acc.lineData[cur.machine[0]].waste_qty || 0) + cur.waste_qty,
                   run_time: (acc.lineData[cur.machine[0]].run_time || 0) + cur.run_time,
                   lost_time: (acc.lineData[cur.machine[0]].lost_time || 0) + cur.lost_time,
@@ -96,6 +99,7 @@ const EVADashboard = ({ filterDate }) => {
                 [cur.machine[0]]: {
                   qty: cur.qty,
                   hours: cur.hours,
+                  active_hours: cur.active_hours,
                   waste_qty: cur.waste_qty,
                   run_time: cur.run_time,
                   lost_time: cur.lost_time,
@@ -128,6 +132,7 @@ const EVADashboard = ({ filterDate }) => {
                   <LineCollapse key={key} line={key} line_data={value} />
                 ))
               : null,
+            showArrow: false,
           },
         ]}
       />

@@ -15,14 +15,14 @@ import numeral from 'numeral'
 const success_color = '#52c41a'
 
 const MachineCard = ({ machine, data }) => {
-  const [expand, setExpand] = useState(false)
+  const Navigate = useNavigate()
   const [calData, setCalData] = useState({ oee: 0, a: 0, p: 0, q: 0 })
   useEffect(() => {
     if (data) {
       let _calData = {
         ...data,
         a: (data.run_time / data.hours / 60) * 100,
-        p: (data.qty / (data.hours * 144)) * 100,
+        p: (data.qty / (data.active_hours * 144)) * 100,
         q: ((data.qty - data.waste_qty) / data.qty) * 100,
         good: data.qty - data.waste_qty,
       }
@@ -39,7 +39,7 @@ const MachineCard = ({ machine, data }) => {
         lg={{ span: 12 }}
         xl={{ span: 8 }}
         xxl={{ span: 6 }}
-        onClick={() => setExpand(!expand)}
+        // onClick={() => Navigate(`/dashboard/eva/detail`, { state: { machine: machine } })}
       >
         <Card style={{ borderRadius: 5, background: 'transparent !important' }}>
           <Flex gap={'small'} align="center" direction="column" wrap>
@@ -78,7 +78,7 @@ const MachineCard = ({ machine, data }) => {
               percent={calData.oee}
               style={{ marginRight: 10 }}
               gapDegree={30}
-              size="small"
+              size={90}
               strokeColor={calData.oee > 70 ? '#B7EB8F' : '#FF4D4F'}
               format={(percent) => numeral(percent).format('0,0') + '%'}
             />
@@ -87,7 +87,7 @@ const MachineCard = ({ machine, data }) => {
                 A
                 <Progress
                   percent={calData.a}
-                  size="small"
+                  size={['default', 10]}
                   strokeColor={calData.a > 90 ? '#B7EB8F' : '#FF4D4F'}
                   format={(percent) => numeral(percent).format('0,0.00') + '%'}
                 />
@@ -96,7 +96,7 @@ const MachineCard = ({ machine, data }) => {
                 P
                 <Progress
                   percent={calData.p}
-                  size="small"
+                  size={['default', 10]}
                   strokeColor={calData.p > 80 ? '#B7EB8F' : '#FF4D4F'}
                   format={(percent) => numeral(percent).format('0,0.00') + '%'}
                 />
@@ -105,49 +105,47 @@ const MachineCard = ({ machine, data }) => {
                 Q
                 <Progress
                   percent={calData.q}
-                  size="small"
+                  size={['default', 10]}
                   strokeColor={calData.q > 96 ? '#B7EB8F' : '#FF4D4F'}
                   format={(percent) => numeral(percent).format('0,0.00') + '%'}
                 />
               </div>
             </Flex>
-            {expand && (
-              <Flex gap="large">
-                <Flex
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'start',
-                    width: '90px',
-                  }}
-                >
-                  <div>เป้า: {calData.hours * 144 ?? 0}</div>
-                  <div>ยอด:{calData.qty ?? 0}</div>
-                </Flex>
-                <Flex
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'start',
-                    width: '90px',
-                  }}
-                >
-                  <div>ของดี: {calData.good ?? 0}</div>
-                  <div>ยอดโอน:{calData.wip_qty ?? 0}</div>
-                </Flex>
-                <Flex
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'start',
-                    width: '90px',
-                  }}
-                >
-                  <div>ของเสีย: {calData.waste_qty ?? 0}</div>
-                  <div>ยอดโอน:{calData.waste_bar_qty ?? 0}</div>
-                </Flex>
+            <Flex gap="large">
+              <Flex
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'start',
+                  width: '90px',
+                }}
+              >
+                <div>เป้า: {calData.active_hours * 144 ?? 0}</div>
+                <div>ยอด:{calData.qty ?? 0}</div>
               </Flex>
-            )}
+              <Flex
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'start',
+                  width: '90px',
+                }}
+              >
+                <div>ของดี: {calData.good ?? 0}</div>
+                <div>ยอดโอน:{calData.wip_qty ?? 0}</div>
+              </Flex>
+              <Flex
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'start',
+                  width: '90px',
+                }}
+              >
+                <div>ของเสีย: {calData.waste_qty ?? 0}</div>
+                <div>ยอดโอน:{calData.waste_bar_qty ?? 0}</div>
+              </Flex>
+            </Flex>
           </Flex>
         </Card>
       </Col>

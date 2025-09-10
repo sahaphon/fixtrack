@@ -1,6 +1,7 @@
 import React from 'react'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
+const EvaDashboardDetail = React.lazy(() => import('./views/Eva/EvaDashboardDetail'))
 const Home = React.lazy(() => import('./views/Home/Home'))
 const User = React.lazy(() => import('./views/User/User'))
 const UserDetail = React.lazy(() => import('./views/User/UserDetail'))
@@ -12,6 +13,13 @@ const EVADetail = React.lazy(() => import('./views/Eva/EvaDetail'))
 const routes = [
   { path: '/', name: 'Home', element: Home, menu: 'home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard, exact: true, menu: 'M001' },
+  {
+    path: '/dashboard/eva/detail',
+    name: 'Eva Detail Dashboard',
+    element: EvaDashboardDetail,
+    exact: true,
+    menu: 'M001',
+  },
   { path: '/user', name: 'ข้อมูลผู้ใช้งาน', element: User, exact: true, menu: 'M001' },
   {
     path: '/user/add',

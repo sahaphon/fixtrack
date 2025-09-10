@@ -33,11 +33,17 @@ const serviceEva = () => {
     return res
   }
 
+  const getDashboardDetail = async ({ filter }) => {
+    const res = await fetch('POST', '/eva/dashboard/get', { filter })
+    return res
+  }
+
   return {
     getAllMachine,
     getOEE,
     getDetail,
     getDashboard,
+    getDashboardDetail,
   }
 }
 
