@@ -26,6 +26,8 @@ import {
 import { Line } from 'react-chartjs-2'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
+ChartJS.defaults.scales.linear.min = 0
+
 const { RangePicker } = DatePicker
 
 const EvaDashboardDetail = () => {
@@ -68,14 +70,17 @@ const EvaDashboardDetail = () => {
     state?.machine ? [state.machine[0], state.machine] : [],
   )
   const [machineList, setMachineList] = useState([])
+  const [colorStorage, setColorStorage] = useState({})
+
   const handleMachineChange = (value) => {
-    console.log(value)
     setSelectedMachines(value)
   }
   const { getAllMachine } = serviceEva()
+
   useEffect(() => {
     loadMachineList()
   }, [])
+
   const loadMachineList = async () => {
     let list = await getAllMachine()
     if (list) {
@@ -95,6 +100,17 @@ const EvaDashboardDetail = () => {
         }, []),
       )
     }
+    if (storage.getItem('machine_color')) {
+      console.log('Machine color found in storage:', JSON.parse(storage.getItem('machine_color')))
+      setColorStorage(JSON.parse(storage.getItem('machine_color')))
+    } else {
+      const color_storage = {}
+      list.forEach((element) => {
+        color_storage[element.machine] = generateRandomRgbColor()
+      })
+      setColorStorage(color_storage)
+      storage.setItem('machine_color', JSON.stringify(color_storage))
+    }
   }
 
   const [target, setTarget] = useState('oee')
@@ -103,8 +119,10 @@ const EvaDashboardDetail = () => {
     { label: 'Availability', value: 'availability' },
     { label: 'Performance', value: 'performance' },
     { label: 'Quality', value: 'quality' },
-    { label: 'Waste', value: 'waste_qty' },
-    { label: 'Production', value: 'qty' },
+    { label: 'ของเสีย', value: 'waste_qty' },
+    { label: 'ยอดผลิต', value: 'qty' },
+    { label: 'เวลาทำงาน', value: 'run_time' },
+    { label: 'Downtime', value: 'down_time' },
   ]
 
   function generateRandomRgbColor() {
@@ -113,23 +131,15 @@ const EvaDashboardDetail = () => {
     const b = Math.floor(Math.random() * 256) // Blue component (0-255)
     return `rgb(${r}, ${g}, ${b})`
   }
-  let color_storage = JSON.parse(storage.getItem('machine_color'))
-  if (!color_storage) {
-    color_storage = {}
-  }
-  const addColorToStorage = (machine) => {
-    if (!color_storage[machine]) {
-      color_storage[machine] = generateRandomRgbColor()
-    }
-    storage.setItem('machine_color', JSON.stringify(color_storage))
-  }
 
   const [graphData, setGraphData] = useState({ labels: [], datasets: [] })
   const [masterData, setMasterData] = useState([])
   const { getDashboardDetail } = serviceEva()
+
   useEffect(() => {
     loadGraphData()
-  }, [filterDate, selectedShifts, selectedMachines])
+  }, [filterDate, selectedShifts, selectedMachines, colorStorage])
+
   const loadGraphData = async () => {
     setIsLoading(true)
     let res = await getDashboardDetail({
@@ -151,7 +161,7 @@ const EvaDashboardDetail = () => {
           acc.labels.push(cur.data_date)
         }
         if (!acc.datasets.find((item) => item.label === cur.machine)) {
-          let color = color_storage[cur.machine] || addColorToStorage(cur.machine)
+          let color = colorStorage[cur.machine]
           acc.datasets.push({
             label: cur.machine,
             data: [],
@@ -167,6 +177,7 @@ const EvaDashboardDetail = () => {
     setGraphData(data)
     setIsLoading(false)
   }
+
   useEffect(() => {
     let data = masterData.reduce(
       (acc, cur) => {
@@ -174,7 +185,7 @@ const EvaDashboardDetail = () => {
           acc.labels.push(cur.data_date)
         }
         if (!acc.datasets.find((item) => item.label === cur.machine)) {
-          let color = color_storage[cur.machine] || addColorToStorage(cur.machine)
+          let color = colorStorage[cur.machine]
           acc.datasets.push({
             label: cur.machine,
             data: [],
@@ -234,6 +245,7 @@ const EvaDashboardDetail = () => {
         </Flex>
         <Spin spinning={isLoading} tip="Loading..." size="large">
           <Line
+            style={{ maxHeight: '70vh' }}
             data={graphData}
             options={{
               responsive: true,
@@ -244,16 +256,6 @@ const EvaDashboardDetail = () => {
                 title: {
                   display: true,
                   text: 'EVA Dashboard Detail',
-                },
-                scales: {
-                  x: {
-                    grace: '5%',
-                  },
-                  y: {
-                    type: 'linear',
-                    beginAtZero: true,
-                    grace: '5%',
-                  },
                 },
               },
             }}

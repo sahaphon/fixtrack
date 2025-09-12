@@ -39,7 +39,7 @@ const MachineCard = ({ machine, data }) => {
         lg={{ span: 12 }}
         xl={{ span: 8 }}
         xxl={{ span: 6 }}
-        // onClick={() => Navigate(`/dashboard/eva/detail`, { state: { machine: machine } })}
+        onClick={() => Navigate(`/dashboard/eva/detail`, { state: { machine: machine } })}
       >
         <Card style={{ borderRadius: 5, background: 'transparent !important' }}>
           <Flex gap={'small'} align="center" direction="column" wrap>
