@@ -24,8 +24,18 @@ import {
   Legend,
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
+import ChartDataLabels from 'chartjs-plugin-datalabels'
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
+ChartJS.register(
+  CategoryScale,
+  ChartDataLabels,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+)
 ChartJS.defaults.scales.linear.min = 0
 
 const { RangePicker } = DatePicker
@@ -250,6 +260,11 @@ const EvaDashboardDetail = () => {
             options={{
               responsive: true,
               plugins: {
+                datalabels: {
+                  display: true,
+                  color: 'black',
+                  align: 'top',
+                },
                 legend: {
                   position: 'right',
                 },

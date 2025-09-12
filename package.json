@@ -30,6 +30,7 @@
     "bootstrap": "^5.3.3",
     "buffer": "^6.0.3",
     "chart.js": "^4.5.0",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "classnames": "^2.5.1",
     "core-js": "^3.39.0",
     "cra-template": "1.2.0",
