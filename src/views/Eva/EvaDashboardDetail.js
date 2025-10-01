@@ -179,11 +179,18 @@ const EvaDashboardDetail = () => {
             backgroundColor: color,
           })
         }
+        while (
+          acc.datasets.find((item) => item.label === cur.machine).data.length <
+          acc.labels.findIndex((item) => item === cur.data_date)
+        ) {
+          acc.datasets.find((item) => item.label === cur.machine).data.push(null)
+        }
         acc.datasets.find((item) => item.label === cur.machine).data.push(cur[target])
         return acc
       },
       { labels: [], datasets: [] },
     )
+    console.log(data)
     setGraphData(data)
     setIsLoading(false)
   }
@@ -203,11 +210,18 @@ const EvaDashboardDetail = () => {
             backgroundColor: color,
           })
         }
+        while (
+          acc.datasets.find((item) => item.label === cur.machine).data.length <
+          acc.labels.findIndex((item) => item === cur.data_date)
+        ) {
+          acc.datasets.find((item) => item.label === cur.machine).data.push(null)
+        }
         acc.datasets.find((item) => item.label === cur.machine).data.push(cur[target])
         return acc
       },
       { labels: [], datasets: [] },
     )
+
     setGraphData(data)
   }, [target])
 
