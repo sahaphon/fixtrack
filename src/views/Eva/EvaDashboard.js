@@ -47,7 +47,6 @@ const EVADashboard = ({ filterDate }) => {
   const tableRef = useRef()
   const storage = window.sessionStorage
 
-  const [filterVisibility, setFilterVisibility] = useState(false)
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
@@ -77,40 +76,36 @@ const EVADashboard = ({ filterDate }) => {
           down_time: (acc.down_time || 0) + cur.down_time,
           waste_bar_qty: (acc.waste_bar_qty || 0) + cur.waste_bar_qty,
           wip_qty: (acc.wip_qty || 0) + cur.wip_qty,
-          lineData: acc.lineData
-            ? {
-                ...acc.lineData,
+          mold: new Set([...acc.mold, ...cur.mold]),
+          target: (acc.target || 0) + ((cur.run_time + cur.lost_time) * 24) / 10 || 0,
+          lineData: {
+            ...acc.lineData,
 
-                [cur.machine[0]]: {
-                  qty: (acc.lineData[cur.machine[0]].qty || 0) + cur.qty,
-                  hours: (acc.lineData[cur.machine[0]].hours || 0) + cur.hours,
-                  active_hours: (acc.lineData[cur.machine[0]].active_hours || 0) + cur.active_hours,
-                  waste_qty: (acc.lineData[cur.machine[0]].waste_qty || 0) + cur.waste_qty,
-                  run_time: (acc.lineData[cur.machine[0]].run_time || 0) + cur.run_time,
-                  lost_time: (acc.lineData[cur.machine[0]].lost_time || 0) + cur.lost_time,
-                  down_time: (acc.lineData[cur.machine[0]].down_time || 0) + cur.down_time,
-                  waste_bar_qty:
-                    (acc.lineData[cur.machine[0]].waste_bar_qty || 0) + cur.waste_bar_qty,
-                  wip_qty: (acc.lineData[cur.machine[0]].wip_qty || 0) + cur.wip_qty,
-                  machine_data: [...acc.lineData[cur.machine[0]].machine_data, cur],
+            [cur.machine[0]]: {
+              qty: (acc.lineData[cur.machine[0]]?.qty || 0) + cur.qty,
+              hours: (acc.lineData[cur.machine[0]]?.hours || 0) + cur.hours,
+              active_hours: (acc.lineData[cur.machine[0]]?.active_hours || 0) + cur.active_hours,
+              waste_qty: (acc.lineData[cur.machine[0]]?.waste_qty || 0) + cur.waste_qty,
+              run_time: (acc.lineData[cur.machine[0]]?.run_time || 0) + cur.run_time,
+              lost_time: (acc.lineData[cur.machine[0]]?.lost_time || 0) + cur.lost_time,
+              down_time: (acc.lineData[cur.machine[0]]?.down_time || 0) + cur.down_time,
+              waste_bar_qty: (acc.lineData[cur.machine[0]]?.waste_bar_qty || 0) + cur.waste_bar_qty,
+              wip_qty: (acc.lineData[cur.machine[0]]?.wip_qty || 0) + cur.wip_qty,
+              machine_data: [
+                ...(acc.lineData[cur.machine[0]]?.machine_data || []),
+                {
+                  ...cur,
+                  target: ((cur.run_time + cur.lost_time) * 24) / 10 || 0,
                 },
-              }
-            : {
-                [cur.machine[0]]: {
-                  qty: cur.qty,
-                  hours: cur.hours,
-                  active_hours: cur.active_hours,
-                  waste_qty: cur.waste_qty,
-                  run_time: cur.run_time,
-                  lost_time: cur.lost_time,
-                  down_time: cur.down_time,
-                  waste_bar_qty: cur.waste_bar_qty,
-                  wip_qty: cur.wip_qty,
-                  machine_data: [cur],
-                },
-              },
+              ],
+              mold: new Set([...(acc.lineData[cur.machine[0]]?.mold || []), ...cur.mold]),
+              target:
+                (acc.lineData[cur.machine[0]]?.target || 0) +
+                  ((cur.run_time + cur.lost_time) * 24) / 10 || 0,
+            },
+          },
         }),
-        {},
+        { mold: new Set(), lineData: {} },
       ),
     )
     setIsLoading(false)
@@ -136,7 +131,6 @@ const EVADashboard = ({ filterDate }) => {
           },
         ]}
       />
-      <FilterComponent visible={{ get: filterVisibility, set: setFilterVisibility }} />
     </>
   )
 }

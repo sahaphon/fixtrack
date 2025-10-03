@@ -150,6 +150,29 @@ const EvaDashboardDetail = () => {
     loadGraphData()
   }, [filterDate, selectedShifts, selectedMachines, colorStorage])
 
+  const reduceData = (acc, cur) => {
+    if (!acc.labels.includes(cur.data_date)) {
+      acc.labels.push(cur.data_date)
+    }
+    if (!acc.datasets.find((item) => item.label === cur.machine)) {
+      let color = colorStorage[cur.machine]
+      acc.datasets.push({
+        label: cur.machine,
+        data: [],
+        borderColor: color,
+        backgroundColor: color,
+      })
+    }
+    while (
+      acc.datasets.find((item) => item.label === cur.machine).data.length <
+      acc.labels.findIndex((item) => item === cur.data_date)
+    ) {
+      acc.datasets.find((item) => item.label === cur.machine).data.push(null)
+    }
+    acc.datasets.find((item) => item.label === cur.machine).data.push(cur[target])
+    return acc
+  }
+
   const loadGraphData = async () => {
     setIsLoading(true)
     let res = await getDashboardDetail({
@@ -165,62 +188,13 @@ const EvaDashboardDetail = () => {
       },
     })
     setMasterData(res)
-    let data = res.reduce(
-      (acc, cur) => {
-        if (!acc.labels.includes(cur.data_date)) {
-          acc.labels.push(cur.data_date)
-        }
-        if (!acc.datasets.find((item) => item.label === cur.machine)) {
-          let color = colorStorage[cur.machine]
-          acc.datasets.push({
-            label: cur.machine,
-            data: [],
-            borderColor: color,
-            backgroundColor: color,
-          })
-        }
-        while (
-          acc.datasets.find((item) => item.label === cur.machine).data.length <
-          acc.labels.findIndex((item) => item === cur.data_date)
-        ) {
-          acc.datasets.find((item) => item.label === cur.machine).data.push(null)
-        }
-        acc.datasets.find((item) => item.label === cur.machine).data.push(cur[target])
-        return acc
-      },
-      { labels: [], datasets: [] },
-    )
-    console.log(data)
+    let data = res.reduce(reduceData, { labels: [], datasets: [] })
     setGraphData(data)
     setIsLoading(false)
   }
 
   useEffect(() => {
-    let data = masterData.reduce(
-      (acc, cur) => {
-        if (!acc.labels.includes(cur.data_date)) {
-          acc.labels.push(cur.data_date)
-        }
-        if (!acc.datasets.find((item) => item.label === cur.machine)) {
-          let color = colorStorage[cur.machine]
-          acc.datasets.push({
-            label: cur.machine,
-            data: [],
-            borderColor: color,
-            backgroundColor: color,
-          })
-        }
-        while (
-          acc.datasets.find((item) => item.label === cur.machine).data.length <
-          acc.labels.findIndex((item) => item === cur.data_date)
-        ) {
-          acc.datasets.find((item) => item.label === cur.machine).data.push(null)
-        }
-        acc.datasets.find((item) => item.label === cur.machine).data.push(cur[target])
-        return acc
-      },
-      { labels: [], datasets: [] },
-    )
+    let data = masterData.reduce(reduceData, { labels: [], datasets: [] })
 
     setGraphData(data)
   }, [target])

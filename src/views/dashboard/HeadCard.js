@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useLoaderData, useNavigate, useSearchParams } from 'react-router-dom'
-import { Card, Tooltip, Dropdown, Col, Row, Progress, Flex } from 'antd'
+import { Card, Tooltip, Dropdown, Col, Row, Progress, Flex, Tag } from 'antd'
 import serviceEva from '../../service/ServiceEva'
 import {
   FolderViewOutlined,
@@ -12,6 +12,7 @@ import {
 import moment from 'moment'
 import numeral from 'numeral'
 import { _ } from 'ajv'
+import { NUM_FORMAT } from '../../config'
 
 const success_color = '#52c41a'
 
@@ -21,8 +22,8 @@ const HeadCard = ({ name, data }) => {
     if (data) {
       let _calData = {
         ...data,
-        a: (data.run_time / data.active_hours / 60) * 100,
-        p: (data.qty / (data.active_hours * 144)) * 100,
+        a: (1 - data.down_time / data.active_hours / 60) * 100,
+        p: (data.qty / data.target) * 100,
         q: ((data.qty - data.waste_qty) / data.qty) * 100,
         good: data.qty - data.waste_qty,
       }
@@ -95,40 +96,54 @@ const HeadCard = ({ name, data }) => {
           />
         </div>
       </Flex>
-      <Flex gap="large">
-        <Flex
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'start',
-            width: '90px',
-          }}
-        >
-          <div>เป้า: {calData.active_hours * 144 ?? 0}</div>
-          <div>ยอด:{calData.qty ?? 0}</div>
-        </Flex>
-        <Flex
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'start',
-            width: '90px',
-          }}
-        >
-          <div>ของดี: {calData.good ?? 0}</div>
-          <div>ยอดโอน:{calData.wip_qty ?? 0}</div>
-        </Flex>
-        <Flex
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'start',
-            width: '90px',
-          }}
-        >
-          <div>ของเสีย: {calData.waste_qty ?? 0}</div>
-          <div>ยอดโอน:{calData.waste_bar_qty ?? 0}</div>
-        </Flex>
+
+      <Flex style={{ flexDirection: 'column', alignItems: 'start' }}>
+        <Row gutter={[16, 16]}>
+          <Col>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'start',
+              }}
+            >
+              ยอด: {numeral(calData.qty).format(NUM_FORMAT.D0)} /{' '}
+              {numeral(calData.active_hours * 144).format(NUM_FORMAT.D0)}
+            </div>
+          </Col>
+          <Col style={{ flexDirection: 'row', display: 'flex', gap: 16 }}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'start',
+              }}
+            >
+              ของดี: {numeral(calData.good).format(NUM_FORMAT.D0)} (
+              <div>{numeral(calData.good - calData.wip_qty).format(NUM_FORMAT.D0)}</div>)
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'start',
+                color: calData.waste_qty - calData.waste_bar_qty !== 0 ? 'red' : 'green',
+              }}
+            >
+              ของเสีย: {numeral(calData.waste_qty).format(NUM_FORMAT.D0)} (
+              <div>{numeral(calData.waste_qty - calData.waste_bar_qty).format(NUM_FORMAT.D0)}</div>)
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <div style={{ marginRight: 5 }}>โมล:</div>
+          {data.mold &&
+            data.mold.map((m) => (
+              <Tag key={m} color="geekblue">
+                {m}
+              </Tag>
+            ))}
+        </Row>
       </Flex>
     </Flex>
   )
