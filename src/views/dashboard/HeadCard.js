@@ -135,15 +135,6 @@ const HeadCard = ({ name, data }) => {
             </div>
           </Col>
         </Row>
-        <Row>
-          <div style={{ marginRight: 5 }}>โมล:</div>
-          {data.mold &&
-            data.mold.map((m) => (
-              <Tag key={m} color="geekblue">
-                {m}
-              </Tag>
-            ))}
-        </Row>
       </Flex>
     </Flex>
   )

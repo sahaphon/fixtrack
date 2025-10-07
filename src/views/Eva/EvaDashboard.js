@@ -21,6 +21,7 @@ import dayjs from 'dayjs'
 const LineCollapse = ({ line, line_data }) => {
   return (
     <Collapse
+      style={{ marginBottom: '10px' }}
       items={[
         {
           key: `EVA - ${line}`,
