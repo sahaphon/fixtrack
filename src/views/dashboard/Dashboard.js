@@ -16,20 +16,20 @@ import dayjs from 'dayjs'
 const { RangePicker } = DatePicker
 const Dashboard = () => {
   const storage = window.sessionStorage
-  const [filterDate, setFilterDate] = useState([
-    dayjs().format('DD/MM/YYYY'),
-    dayjs().format('DD/MM/YYYY'),
-  ])
+
+  const [filterDate, setFilterDate] = useState(
+    JSON.parse(storage.getItem('dashboard_date')) ?? [
+      dayjs().format('DD/MM/YYYY'),
+      dayjs().format('DD/MM/YYYY'),
+    ],
+  )
   const onDateChange = (dates, dateStrings) => {
     setFilterDate(dateStrings)
     storage.setItem('dashboard_date', JSON.stringify(dateStrings))
   }
 
   useEffect(() => {
-    let saved_date = JSON.parse(storage.getItem('dashboard_date'))
-    if (saved_date) {
-      setFilterDate(saved_date)
-    } else {
+    if (!JSON.parse(storage.getItem('dashboard_date'))) {
       storage.setItem(
         'dashboard_date',
         JSON.stringify([dayjs().format('DD/MM/YYYY'), dayjs().format('DD/MM/YYYY')]),
