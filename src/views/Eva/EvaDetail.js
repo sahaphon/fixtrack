@@ -15,6 +15,12 @@ const lost_topic = [
   'เปลี่ยนโมลด์',
   'ฉีดเก็บSize',
 ]
+const lost_tpoic_detail = ['ซ่อมเครื่อง', 'ซ่อมโมลด์', 'เปลี่ยนโมลด์', 'ฉีดเก็บSize']
+const lost_detail_value = {
+  ซ่อมโมลด์: { 1: 'ซ้าย', 2: 'ขวา', 3: 'ซ้าย+ขวา' },
+  เปลี่ยนโมลด์: { 1: 'ซ้าย', 2: 'ขวา', 3: 'ซ้าย+ขวา' },
+  ฉีดเก็บSize: { 1: 'ซ้าย', 2: 'ขวา', 3: 'ซ้าย+ขวา' },
+}
 
 const EVADetail = () => {
   const location = useLocation()
@@ -68,24 +74,31 @@ const EVADetail = () => {
         const cellStyle = {
           background: 'rgb(221.7, 90.3, 90.3)',
         }
-        let colSpan = 1
-        for (let j = i + 1; j < 12; j++) {
-          if (record[i] == record[j]) {
-            colSpan++
-          }
-        }
-        if (record[i] == record[i - 1]) {
-          colSpan = 0
-        }
+
         return lost_topic.includes(record.topic)
           ? {
               props: {
                 style: text ? cellStyle : {},
-                colSpan: text ? colSpan : 1,
               },
               children: (
-                <Tooltip placement="top" title={'3 นาที'}>
-                  <div style={{ color: '#080a0c' }}>{text}</div>
+                <Tooltip
+                  placement="top"
+                  title={text ? (text.length > 0 ? `${text[0].down} นาที` : '') : ''}
+                >
+                  <div style={{ color: '#080a0c' }}>
+                    {lost_tpoic_detail.includes(record.topic)
+                      ? text
+                        ? text.map((item, index) => (
+                            <div key={index}>
+                              {`${item.station} ${record.topic in lost_detail_value ? lost_detail_value[record.topic][item.value] : ''}`}
+                              <br />
+                            </div>
+                          ))
+                        : null
+                      : text === 1
+                        ? ''
+                        : null}
+                  </div>
                 </Tooltip>
               ),
             }
