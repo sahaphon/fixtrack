@@ -12,13 +12,13 @@ const EVADetail = React.lazy(() => import('./views/Eva/EvaDetail'))
 
 const routes = [
   { path: '/', name: 'Home', element: Home, menu: 'home' },
-  { path: '/dashboard', name: 'Dashboard', element: Dashboard, exact: true, menu: 'M001' },
+  { path: '/dashboard', name: 'Dashboard', element: Dashboard, exact: true, menu: 'M002' },
   {
     path: '/dashboard/eva/detail',
     name: 'Eva Detail Dashboard',
     element: EvaDashboardDetail,
     exact: true,
-    menu: 'M001',
+    menu: 'M002',
   },
   { path: '/user', name: 'ข้อมูลผู้ใช้งาน', element: User, exact: true, menu: 'M001' },
   {
@@ -83,14 +83,14 @@ const routes = [
     name: 'EVA',
     element: EVATable,
     exact: true,
-    menu: 'M002',
+    menu: 'M003',
   },
   {
     path: '/eva/detail',
     name: 'รายละเอียดข้อมูล EVA',
     element: EVADetail,
     exact: true,
-    menu: 'M002',
+    menu: 'M003',
   },
 ]
 
