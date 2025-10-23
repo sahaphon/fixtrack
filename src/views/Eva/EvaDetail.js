@@ -4,6 +4,7 @@ import serviceEva from '../../service/ServiceEva'
 import { useLocation } from 'react-router-dom'
 import moment from 'moment'
 import dayjs from 'dayjs'
+import numeral from 'numeral'
 
 const lost_topic = [
   'แก้เม็ด',
@@ -38,6 +39,15 @@ const EVADetail = () => {
 
   const start_date = moment(date).hours(shift === 'A' ? 6 : 18)
   const end_date = moment(date).hours(shift === 'A' ? 7 : 19)
+
+  const genStyle = (text, record) => {
+    switch (record.topic) {
+      case 'ประสิทธิภาพ (%)':
+        console.log('text', text)
+        console.log(numeral(text)._value > 85 ? { color: 'red' } : {})
+        return numeral(text)._value < 85 ? { color: 'red' } : {}
+    }
+  }
 
   const columns = [
     {
@@ -104,7 +114,7 @@ const EVADetail = () => {
             }
           : {
               props: {
-                style: {},
+                style: genStyle(text, record),
               },
               children: <div>{text}</div>,
             }
@@ -122,7 +132,7 @@ const EVADetail = () => {
 
       return {
         props: {
-          style: {},
+          style: genStyle(text, record),
         },
         children: <div>{text}</div>,
       }
