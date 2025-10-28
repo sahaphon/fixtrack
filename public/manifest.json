@@ -1,6 +1,6 @@
 {
-    "short_name": "OEE",
-    "name": "OEE",
+    "short_name": "Fixtrack",
+    "name": "ระบบบริหารแจ้งซ่อมยานพาหนะ (Fixtrack)",
     "icons": [
         {
             "src": "./assets/img/favicon.png",

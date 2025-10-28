@@ -23,6 +23,8 @@ import {
   CodeOutlined,
   ShopOutlined,
   DashboardOutlined,
+  SettingOutlined,
+  CarOutlined
 } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
 import { fetchLogin } from '../../../fetch'
@@ -87,7 +89,7 @@ const Login = ({ loadedRoute }) => {
                       style={{
                         backgroundColor: THEME_PROGRAM,
                       }}
-                      icon={<DashboardOutlined style={{ display: 'inline-grid' }} />}
+                      icon={<CarOutlined style={{ display: 'inline-grid' }} />}
                     />
                   </Form.Item>
                   <Form.Item className={'text-center font-weight-bold w3-animate-right'}>
@@ -96,7 +98,7 @@ const Login = ({ loadedRoute }) => {
                         fontSize: '17px',
                       }}
                     >
-                      OEE
+                      ระบบบริหารแจ้งซ่อมยานพาหนะ (Fixtrack)
                     </b>
                   </Form.Item>
                   <Form.Item

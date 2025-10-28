@@ -1,11 +1,11 @@
 {
-  "name": "OEE",
+  "name": "Fixtrack",
   "version": "1.0.0",
-  "description": "OEE",
-  "homepage": "oee",
+  "description": "ระบบบริหารแจ้งซ่อมยานพาหนะ (Fixtrack)",
+  "homepage": "fixtrack",
   "license": "MIT",
   "author": {
-    "name": "ADDA",
+    "name": "Inno Co., Ltd.",
     "url": "http://10.32.0.83"
   },
   "scripts": {
