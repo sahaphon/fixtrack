@@ -5,6 +5,11 @@ import _ from 'lodash'
 import { CNavGroup, CNavItem } from '@coreui/react'
 
 const mapNavFuntion = (nav) => {
+    if (!Array.isArray(nav)) {
+        console.error('mapNavFuntion: nav is not an array!', nav)
+        return []
+    }
+    
     let _nav = nav
         // Show only have to and have children have to
         .filter(function f(e) {

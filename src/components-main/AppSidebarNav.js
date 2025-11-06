@@ -54,7 +54,6 @@ export const AppSidebarNav = ({ items }) => {
         const Component = component
         return (
             <Component
-                compact
                 as="div"
                 key={index}
                 toggler={navLink(name, icon)}

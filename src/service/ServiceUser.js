@@ -13,8 +13,8 @@ const ServiceUser = () => {
     return res
   }
 
-  const getUserDetail = async (emp_id) => {
-    const res = await fetch('POST', `/users/get`, { emp_id })
+  const getUserDetail = async (user_id) => {
+    const res = await fetch('POST', `/users/get`, { user_id })
     return res
   }
 

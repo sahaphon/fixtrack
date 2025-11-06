@@ -1,27 +1,20 @@
 import Cookies from 'js-cookie'
 import { fetch } from './fetch'
 
-const PROGRAM = 'oee'
+const PROGRAM = 'Fixtrack'
 const URLS = {
   SERVER: {
-    BASE_URL: 'https://app.adda.co.th/oee-api/api',
+    BASE_URL: 'https://app.adda.co.th/fixtrack-api/api',
     SOCKET_PATH: {
       url: 'https://app.adda.co.th',
-      path: '/oee-api/socket.io/',
-    },
-  },
-  SERVER60: {
-    BASE_URL: 'http://10.32.0.60/oee-api/api',
-    SOCKET_PATH: {
-      url: 'http://10.32.0.60',
-      path: '/oee-api/socket.io/',
+      path: '/fixtrack-api/socket.io/',
     },
   },
   PRODUCTION: {
     BASE_URL: '/oee-api/api',
     SOCKET_PATH: {
       url: '/',
-      path: '/oee-api/socket.io/',
+      path: '/fixtrack-api/socket.io/',
     },
   },
   LOCAL: {
@@ -67,7 +60,7 @@ const getPermission = async (menuID) => {
     menu_id: menuID,
   }
   const data = await fetch('post', '/users/permission', params)
-  // console.log('perm: ', data)
+  console.log('perm: ', data)
   if (!data) {
     return {
       open: false,

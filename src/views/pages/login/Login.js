@@ -43,8 +43,10 @@ const Login = ({ loadedRoute }) => {
     const { username, password } = values
     const user = username.toUpperCase()
     setLoading(true)
+
     const data = await fetchLogin({ user_id: user, password: password })
     console.log('data', data)
+    
     if (data) {
       setLoading(false)
       Cookies.set(MASTER, user)

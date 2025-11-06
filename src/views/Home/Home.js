@@ -18,9 +18,9 @@ const Home = () => {
             }}
           ></div>
           <div style={{ textAlign: 'center', marginTop: '-80px' }}>
-            <h3 className="h2">OEE</h3>
+            <h3 className="h2">ระบบบริหารแจ้งซ่อมยานพาหนะ</h3>
             <p style={{ fontSize: '17px' }}>
-              ยินดีต้อนรับเข้าสู่ระบบ <b style={{ color: THEME_PROGRAM, fontSize: '18px' }}>OEE</b>{' '}
+              ยินดีต้อนรับเข้าสู่ระบบ <b style={{ color: THEME_PROGRAM, fontSize: '18px' }}>FIXTRACK</b>{' '}
             </p>
             <u
               style={{

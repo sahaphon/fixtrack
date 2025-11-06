@@ -13,10 +13,9 @@ import {
 
 import { AppSidebarNav } from './AppSidebarNav'
 
-import logo from '../../src/assets/images/logo-online.png'
-import sygnet from '../../src/assets/images/logo-online-small.png'
+import logo from '../assets/images/logo-sidebar.png'
+import sygnet from '../assets/images/logo-sidebar-small.png'
 import navigation from '../_nav'
-import mapNavFuntion from './Nav'
 
 const AppSidebar = () => {
     const dispatch = useDispatch()
@@ -38,11 +37,9 @@ const AppSidebar = () => {
         //   const newNav = mapNavFuntion(nav)
         //   setNavigation(newNav)
         // }
-        const newNav = mapNavFuntion(navigation)
-        console.log('navigation', navigation)
-
-        console.log('newNav', newNav)
-        setNavigations(newNav)
+        
+        // Use navigation directly since it's already in the correct CoreUI format
+        setNavigations(navigation)
     }
 
     return (
@@ -72,7 +69,7 @@ const AppSidebar = () => {
                     onClick={() => dispatch({ type: 'set', sidebarShow: false })}
                 />
             </CSidebarHeader>
-            <AppSidebarNav items={navigation} />
+            <AppSidebarNav items={navigations} />
             <CSidebarFooter className="border-top d-none d-lg-flex">
                 <CSidebarToggler
                     onClick={() =>

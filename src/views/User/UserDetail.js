@@ -13,6 +13,9 @@ import {
   SaveOutlined,
   UnlockTwoTone,
   LockTwoTone,
+  MoreOutlined,
+  SmallDashOutlined,
+  PlusOutlined,
 } from '@ant-design/icons'
 
 import { alertConfirm } from '../../components/Alert/Alert'
@@ -27,6 +30,10 @@ import { ServiceUser } from '../../service/ServiceUser'
 import { MASTER } from '../../config'
 import { useTableHeight } from '../../utilities/useTableHeight'
 
+import AddDepartmentModal from './AddDepartmentModal'
+import AddDivisionModal from './AddDivisionModal'
+import AddPositionModal from './AddPositionModal'
+
 const tailLayout = {
   wrapperCol: { offset: 1, span: 24 },
 }
@@ -40,6 +47,8 @@ const unlock = <UnlockTwoTone twoToneColor="#52c41a" />
 const lock = <LockTwoTone twoToneColor="#eb2f96" />
 
 const UserDetail = () => {
+
+  const formRef = useRef()
   const history = useNavigate()
   const location = useLocation()
   const type_page = location.pathname.split('/')[2]
@@ -51,7 +60,7 @@ const UserDetail = () => {
   const { getMenu, addMenu, getMenuDetail, updateMenu, getAllMenu } = ServiceFile()
   const { getAllUser, getUserDetail, getSearchEmpId, addUser, updateUser } = ServiceUser()
   const inputFile = useRef(null)
-  const formRef = useRef()
+
 
   const resetTexbox = [
     { name: ['level'], value: 1 },
@@ -60,6 +69,8 @@ const UserDetail = () => {
     { name: ['position'], value: '' },
     { name: ['dept', 'code'], value: '' },
     { name: ['dept', 'name'], value: '' },
+    { name: ['position', 'code'], value: '' },
+    { name: ['position', 'name'], value: '' },
   ]
 
   const [Valid, setValid] = useState('')
@@ -79,6 +90,13 @@ const UserDetail = () => {
   const [ActionConfirm, setConfirm] = useState(false)
   const [ActionCancel, setCancel] = useState(false)
 
+  const [openModal, setOpenModal] = useState(false)
+  const [openDivisionModal, setOpenDivisionModal] = useState(false)
+  const [openPositionModal, setOpenPositionModal] = useState(false)
+  const [typeService, setTypeService] = useState('Department')
+
+  const [bgColor, setBgColor] = useState('#7094db');
+
   const columns = [
     {
       title: () => <div className="font-weight-bold">#</div>,
@@ -92,7 +110,7 @@ const UserDetail = () => {
       title: () => <div className="font-weight-bold">รหัสแฟ้ม</div>,
       dataIndex: 'menu_id',
       key: 'menu_id',
-      width: 100,
+      width: 80,
       align: 'center',
       render: (text, record, index) => text,
     },
@@ -100,14 +118,14 @@ const UserDetail = () => {
       title: () => <div className="text-center font-weight-bold">ชื่อแฟ้ม</div>,
       dataIndex: 'menu_name',
       key: 'menu_name',
-      width: 500,
+      width: 350,
       render: (text, record, index) => text,
     },
     {
       title: () => <div className="font-weight-bold">เปิดใช้งาน</div>,
       dataIndex: 'open_count',
       key: 'open_count',
-      width: 100,
+      width: 80,
       align: 'center',
       render: (text, record, index) => numeral(text).format('0,0'),
     },
@@ -115,7 +133,7 @@ const UserDetail = () => {
       title: () => <div className="font-weight-bold">เข้าใช้ล่าสุด</div>,
       dataIndex: 'last_login',
       key: 'last_login',
-      width: 160,
+      width: 100,
       align: 'center',
       render: (text, record, index) => (text ? moment.utc(text).format('DD/MM/YYYY HH:mm') : null),
     },
@@ -288,7 +306,7 @@ const UserDetail = () => {
       align: 'center',
       render: (text, record, index) => (text ? unlock : lock),
     },
-    {
+     {
       title: () => {
         return (
           <div className="text-center font-weight-bold">
@@ -307,7 +325,7 @@ const UserDetail = () => {
       },
       onCell: (record, rowIndex) => ({
         onClick: () => {
-          setPermiss('calculate', record.action_calculate, rowIndex)()
+          setPermiss('confirm', record.action_confirm, rowIndex)()
         },
       }),
       dataIndex: 'action_calculate',
@@ -428,15 +446,18 @@ const UserDetail = () => {
 
     setLoadingTable(true)
     const data = await getUserDetail(id)
-    console.log('getUserDetail', data)
+
     if (data !== undefined) {
       setFields([
         { name: ['level'], value: data.user_level === 'A' ? 2 : 1 },
-        { name: ['name'], value: data.name_th + ' ' + data.surname_th },
+        { name: ['name'], value: data.name },
         { name: ['emp_id'], value: data.emp_id },
-        { name: ['position'], value: data.position },
         { name: ['dept', 'code'], value: data.department_id },
-        { name: ['dept', 'name'], value: data.department_description },
+        { name: ['dept', 'name'], value: data.department_name },
+        { name: ['division', 'code'], value: data.division_id },
+        { name: ['division', 'name'], value: data.division_name },
+        { name: ['position', 'code'], value: data.position_id },
+        { name: ['position', 'name'], value: data.position_name },
       ])
 
       setData(data.menu)
@@ -459,6 +480,8 @@ const UserDetail = () => {
         { name: ['position'], value: '' },
         { name: ['dept', 'code'], value: '' },
         { name: ['dept', 'name'], value: '' },
+        { name: ['division', 'code'], value: '' },
+        { name: ['division', 'name'], value: '' },
       ])
 
       setData(data.menu)
@@ -665,6 +688,10 @@ const UserDetail = () => {
     window.scrollTo(0, 0)
   }
 
+  const handleSelectDataModal = (record) => {
+      console.log('Selected record:', record);
+  }
+
   return (
     <Card style={{ paddingBottom: '10px' }}>
       <Form
@@ -696,9 +723,19 @@ const UserDetail = () => {
             </Form.Item>
           </Col>
           <Col md={12}>
-            <Form.Item name="name" label="ชื่อ-สกุล" className="mb-0" {...tailLayout}>
+            <Form.Item 
+                name="name" 
+                label="ชื่อ-สกุล" 
+                className="mb-0" {...tailLayout}
+                rules={[
+                  {
+                    required: true,
+                    message: 'โปรดระบุชื่อ-สกุล !',
+                  },
+                ]} 
+            >
               <Input
-                disabled
+                disabled={type_page === 'view' ? true : false}
                 placeholder="ชื่อ-สกุล"
                 style={{ color: 'black' }}
                 autoComplete={`off`}
@@ -710,7 +747,7 @@ const UserDetail = () => {
           <Col md={12}>
             <Form.Item
               name="emp_id"
-              label="รหัสพนักงาน"
+              label="เลขประจำตัว"
               className="mb-0"
               validateStatus={Valid}
               hasFeedback
@@ -723,7 +760,7 @@ const UserDetail = () => {
               {...tailLayout}
             >
               <Input
-                placeholder="รหัสพนักงาน"
+                placeholder="เลขประจำตัวข้าราชการ / พนักงาน"
                 maxLength={5}
                 autoComplete={`off`}
                 disabled={type_page === 'edit' ? true : false}
@@ -743,17 +780,42 @@ const UserDetail = () => {
             </Form.Item>
           </Col>
           <Col md={12}>
-            <Form.Item label="แผนก" className="mb-1" {...tailLayout}>
-              <Space.Compact compact style={{ width: '100%' }}>
-                <Form.Item name={['dept', 'code']} noStyle>
+            <Form.Item label="ฝ่าย/แผนก" className="mb-1" {...tailLayout}>
+              <Space.Compact style={{ width: '100%' }}>
+                 <Button
+                    style={{ 
+                      width: '15%', 
+                      marginRight: '3px', 
+                      color:'white',
+                      backgroundColor:'green', 
+                      borderRadius: '6px',
+                    }}
+                    onClick={() => 
+                       setOpenModal(true)
+                    }
+                  >
+                    <PlusOutlined />
+                    เลือก
+                  </Button>
+                <Form.Item 
+                    name={['dept', 'code']} 
+                     rules={[
+                        {
+                          required: true,
+                          message: 'โปรดระบุรหัสฝ่าย/แผนก !',
+                        },
+                      ]}
+                    noStyle
+                >
                   <Input
                     style={{
-                      width: '30%',
+                      width: '15%',
                       color: 'black',
                     }}
-                    disabled
-                    placeholder="รหัสแผนก"
+                    disabled={type_page === 'view' ? true : false}
+                    placeholder="รหัส"
                     autoComplete={`off`}
+                    // suffix={<MoreOutlined />}
                   />
                 </Form.Item>
                 <Form.Item name={['dept', 'name']} noStyle>
@@ -771,16 +833,115 @@ const UserDetail = () => {
             </Form.Item>
           </Col>
         </Row>
+        <Row>
+          <Col md={12}></Col>
+          <Col md={12}>
+           <Form.Item label="สังกัด/กอง" className="mb-1" {...tailLayout}>
+              <Space.Compact style={{ width: '100%' }}>
+                <Button
+                    style={{ 
+                      width: '15%', 
+                      marginRight: '3px', 
+                      color:'white',
+                      backgroundColor:'green', 
+                      borderRadius: '6px' }}
+                    onClick={() => 
+                       setOpenDivisionModal(true)
+                    }
+                  >
+                    <PlusOutlined />
+                    เลือก
+                  </Button>
+                <Form.Item
+                  name={['division', 'code']} noStyle
+                  rules={[
+                    {
+                      required: true,
+                      message: 'โปรดระบุรหัสสังกัด/กอง !',
+                    },
+                  ]}
+                >
+                  <Input
+                    style={{
+                      width: '15%',
+                      color: 'black',
+                    }}
+                    disabled={type_page === 'view' ? true : false}
+                    placeholder="รหัส"
+                    autoComplete={`off`}
+                  />
+                </Form.Item>
+                <Form.Item name={['division', 'name']} noStyle>
+                  <Input
+                    style={{
+                      width: '70%',
+                      color: 'black',
+                    }}
+                    disabled
+                    placeholder="ชื่อสังกัด/กอง"
+                    autoComplete={`off`}
+                  />
+                </Form.Item>
+              </Space.Compact>
+            </Form.Item>
+          </Col>
+        </Row>
         <Row className="mb-2">
           <Col md={12}></Col>
           <Col md={12}>
-            <Form.Item name="position" label="ตำแหน่ง" className="mb-0" {...tailLayout}>
-              <Input
-                disabled
-                style={{ color: 'black' }}
-                placeholder="ตำแหน่ง"
-                autoComplete={`off`}
-              />
+            <Form.Item name="position" label="ระดับ/ตำแหน่ง" className="mb-0" {...tailLayout}>
+              <Space.Compact style={{ width: '100%' }}>
+                  <Button
+                    style={{ 
+                      width: '15%', 
+                      marginRight: '3px', 
+                      color:'white',
+                      backgroundColor:'green', 
+                      borderRadius: '6px',
+                      transition: 'background-color 0.3s ease',
+                    }}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = '#228b22'}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = 'green'}
+                    onClick={() => 
+                      setOpenPositionModal(true)
+                    }
+                  >
+                    <PlusOutlined />
+                    เลือก
+                  </Button>
+                  <Form.Item 
+                    name={['position', 'code']} 
+                    noStyle
+                    rules={[
+                      {
+                        required: true,
+                        message: 'โปรดระบุรหัสตำแหน่ง !',
+                      },
+                    ]}
+                  >
+                    <Input
+                      disabled={type_page === 'view' ? true : false}
+                      style={{ 
+                        width: '15%',
+                        color: 'black'
+                       }}
+                      placeholder="รหัส"
+                      autoComplete={`off`}
+                    />
+                  </Form.Item>
+                  <Form.Item name={['position', 'name']} noStyle>
+                    <Input
+                      disabled
+                      style={{ 
+                        width: '70%',
+                        color: 'black',
+                        backgroundColor: '#f5f5f5'
+                       }}
+                      placeholder="ตำแหน่ง"
+                      autoComplete={`off`}
+                    />
+                  </Form.Item>
+              </Space.Compact>
             </Form.Item>
           </Col>
         </Row>
@@ -866,6 +1027,30 @@ const UserDetail = () => {
           </Col>
         </Row>
       </Form>
+      {openModal && (
+          <AddDepartmentModal
+            typeService={typeService}
+            visible={openModal}
+            setOpenModal={setOpenModal}
+            onSelectData={handleSelectDataModal}
+          />
+      )}
+      {openDivisionModal && (
+          <AddDivisionModal
+            visible={openDivisionModal}
+            setOpenDivisionModal={setOpenDivisionModal}
+            onSelectData={handleSelectDataModal}
+          />
+      )
+      }
+      { openPositionModal && (
+          <AddPositionModal
+            visible={openPositionModal}
+            setOpenPositionModal={setOpenPositionModal}
+            onSelectData={handleSelectDataModal}
+          />
+       )
+      }
     </Card>
   )
 }

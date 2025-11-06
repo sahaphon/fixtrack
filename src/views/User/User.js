@@ -66,54 +66,68 @@ const User = () => {
           key: 'user_level2',
           sorter: (a, b) => a.user_level.localeCompare(b.user_level),
           width: 100,
+          align: 'center',
           render: (text, record) => (text === 'A' ? 'Admin' : 'User'),
         },
       ],
     },
     {
       title: () => <label style={{ fontWeight: 'bold' }}>{'User ID'}</label>,
-      dataIndex: 'emp_id',
-      key: 'emp_id',
-      sorter: (a, b) => a.emp_id.localeCompare(b.emp_id),
+      dataIndex: 'user_id',
+      key: 'user_id',
+      sorter: (a, b) => a.user_id.localeCompare(b.user_id),
       width: 100,
+      align: 'center',
     },
     {
       title: () => <label style={{ fontWeight: 'bold' }}>{'ชื่อ-นามสกุล'}</label>,
-      dataIndex: 'full_name',
-      key: 'full_name',
-      sorter: (a, b) => a.full_name.localeCompare(b.full_name),
-      width: 300,
+      dataIndex: 'fullname',
+      key: 'fullname',
+      sorter: (a, b) => a.fullname.localeCompare(b.fullname),
+      width: 260,
     },
     {
       title: () => <label style={{ fontWeight: 'bold' }}>{'Level'}</label>,
-      dataIndex: 'level_manager',
-      key: 'level_manager',
-      sorter: (a, b) => a.level_manager.localeCompare(b.level_manager),
-      width: 70,
+      dataIndex: 'level_name',
+      key: 'level_name',
+      sorter: (a, b) => a.level_name.localeCompare(b.level_name),
+      width: 200,
       align: 'center',
     },
     {
       title: () => <label style={{ fontWeight: 'bold' }}>{'ตำแหน่ง'}</label>,
-      dataIndex: 'position',
-      key: 'position',
+      dataIndex: 'position_name',
+      key: 'position_name',
       sorter: (a, b) => {
-        if (a.position !== null && b.position !== null) {
-          a.position.localeCompare(b.position)
+        if (a.position_name !== null && b.position_name !== null) {
+          a.position_name.localeCompare(b.position_name)
         }
       },
-      width: 180,
+      width: 400,
       render: (text, record) => (text ? (text === 'null' ? '' : text) : ''),
     },
     {
-      title: () => <label style={{ fontWeight: 'bold' }}>{'แผนก'}</label>,
-      dataIndex: 'department_description',
-      key: 'department_name',
+      title: () => <label style={{ fontWeight: 'bold' }}>{'ฝ่าย'}</label>,
+      dataIndex: 'dep_name',
+      key: 'dep_name',
       sorter: (a, b) => {
-        if (a.department_name !== null && b.department_name !== null) {
-          a.department_name.localeCompare(b.department_name)
+        if (a.dep_name !== null && b.dep_name !== null) {
+          a.dep_name.localeCompare(b.dep_name)
         }
       },
-      width: 380,
+      width: 200,
+      render: (text, record) => (text ? (text === 'null' ? '' : text) : ''),
+    },
+    {
+      title: () => <label style={{ fontWeight: 'bold' }}>{'สังกัด/กอง'}</label>,
+      dataIndex: 'division_name',
+      key: 'division_name',
+      sorter: (a, b) => {
+        if (a.division_name !== null && b.division_name !== null) {
+          a.division_name.localeCompare(b.division_name)
+        }
+      },
+      width: 180,
       render: (text, record) => (text ? (text === 'null' ? '' : text) : ''),
     },
     {
@@ -149,7 +163,7 @@ const User = () => {
       width: 150,
       align: 'center',
       sorter: (a, b) => moment(a.last_login).unix() - moment(b.last_login).unix(),
-      render: (text, record) => (text ? moment.utc(text).format('DD/MM/YYYY HH:mm') : ''),
+      render: (text, record) => (text ? moment(text).format('DD/MM/YYYY HH:mm') : ''),
     },
   ]
 
@@ -200,6 +214,7 @@ const User = () => {
       type_search: type,
     })
 
+    console.log('data user: ', data) 
     if (data !== undefined) {
       setData(
         data.result.map((item) => ({
@@ -216,10 +231,10 @@ const User = () => {
   const handleMenuClick = (record, key) => {
     switch (key) {
       case 'edit':
-        history(`/user/edit?docno=${record.emp_id}`, { send_data: record })
+        history(`/user/edit?docno=${record.user_id}`, { send_data: record })
         break
       case 'copy':
-        history(`/user/copy?docno=${record.emp_id}`, { send_data: record })
+        history(`/user/copy?docno=${record.user_id}`, { send_data: record })
         break
       case 'delete':
         handleDelete(record)
@@ -234,7 +249,7 @@ const User = () => {
   const handleDelete = async (record) => {
     alertConfirm({
       alert_Title: 'คุณต้องการลบรายการ',
-      alert_text: `ผู้ใช้งาน พนักงานรหัส ${record.emp_id}ใช่หรือไม่ ?`,
+      alert_text: `ผู้ใช้งานรหัส ${record.user_id} ใช่หรือไม่ ?`,
       onConfirm: async () => {
         const params = {
           emp_id: record.emp_id,
@@ -254,10 +269,10 @@ const User = () => {
   const handleChangeStatus = async (record) => {
     alertConfirm({
       alert_Title: 'คุณต้องการเปลี่ยนสิทธิ์เข้าใช้งาน',
-      alert_text: 'พนักงานรหัส ' + record.emp_id + ' ใช่หรือไม่ ?',
+      alert_text: 'ผู้ใช้รหัส ' + record.user_id + ' ใช่หรือไม่ ?',
       onConfirm: async () => {
         const params = {
-          emp_id: record.emp_id,
+          emp_id: record.user_id,
           is_active: !record.is_active,
         }
 
@@ -284,7 +299,7 @@ const User = () => {
       <TableComponentForwardRef
         ref={tableRef}
         searchList={searchOption}
-        rowKey={'emp_id'}
+        rowKey={'user_id'}
         className={'user-table'}
         dataSource={Data}
         columns={columns}
