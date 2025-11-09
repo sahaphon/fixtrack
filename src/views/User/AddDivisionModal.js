@@ -70,8 +70,8 @@ const AddDivisionModal = ({
                 size="small"
                 icon={<CheckOutlined />}
                 onClick={() => {
-                    onSelectData(record);
-                    setOpenModal(false);
+                    onSelectData({...record, type: 'Division' });
+                    setOpenDivisionModal(false);
                 }}
             >
                 เลือก

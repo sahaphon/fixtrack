@@ -87,23 +87,23 @@ const User = () => {
       width: 260,
     },
     {
-      title: () => <label style={{ fontWeight: 'bold' }}>{'Level'}</label>,
-      dataIndex: 'level_name',
-      key: 'level_name',
-      sorter: (a, b) => a.level_name.localeCompare(b.level_name),
-      width: 200,
+      title: () => <label style={{ fontWeight: 'bold' }}>{'ระดับ'}</label>,
+      dataIndex: 'role_id',
+      key: 'role_id',
+      sorter: (a, b) => a.role_id.localeCompare(b.role_id),
+      width: 70,
       align: 'center',
     },
     {
       title: () => <label style={{ fontWeight: 'bold' }}>{'ตำแหน่ง'}</label>,
-      dataIndex: 'position_name',
-      key: 'position_name',
+      dataIndex: 'role_name_th',
+      key: 'role_name_th',
       sorter: (a, b) => {
-        if (a.position_name !== null && b.position_name !== null) {
-          a.position_name.localeCompare(b.position_name)
+        if (a.role_name_th !== null && b.role_name_th !== null) {
+          a.role_name_th.localeCompare(b.role_name_th)
         }
       },
-      width: 400,
+      width: 300,
       render: (text, record) => (text ? (text === 'null' ? '' : text) : ''),
     },
     {
@@ -115,7 +115,7 @@ const User = () => {
           a.dep_name.localeCompare(b.dep_name)
         }
       },
-      width: 200,
+      width: 250,
       render: (text, record) => (text ? (text === 'null' ? '' : text) : ''),
     },
     {
@@ -127,7 +127,7 @@ const User = () => {
           a.division_name.localeCompare(b.division_name)
         }
       },
-      width: 180,
+      width: 250,
       render: (text, record) => (text ? (text === 'null' ? '' : text) : ''),
     },
     {

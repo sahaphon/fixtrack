@@ -13,6 +13,8 @@ import {
     cilPuzzle,
     cilSpeedometer,
     cilStar,
+    cilTag,
+    cilPaperPlane
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 

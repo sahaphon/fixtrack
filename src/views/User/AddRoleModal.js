@@ -3,19 +3,19 @@ import ModalComponent from "../../components/Modal/ModalComponent";
 import TableComponent from "../../components/Table/TableComponent";
 import Btn from "../../components/Button/BtnComponent";
 
-import { ServicePosition } from "../../service/master/ServicePosition";
+import { ServiceRole } from "../../service/master/ServiceRole";
 import { Button } from "antd";
 
 import { CheckOutlined } from '@ant-design/icons';
 
-const AddPositionModal = ({ 
+const AddRoleModal = ({ 
     visible = false,
-    setOpenPositionModal = () => {},
+    setOpenRoleModal = () => {},
     onSelectData = () => {},
 }) => {
 
   const formRef = useRef()
-  const { getPosition } = ServicePosition()
+  const { getRole } = ServiceRole()
 
   const [dataTable, setDataTable] = useState([])
   const [total, setTotal] = useState(0);
@@ -24,8 +24,7 @@ const AddPositionModal = ({
   const [forceReset, setForceReset] = useState(0);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
 
-
-  const positionColumns = [
+  const roleColumns = [
      {
         title: 'เลือก',
         key: 'select',
@@ -37,8 +36,8 @@ const AddPositionModal = ({
                 size="small"
                 icon={<CheckOutlined />}
                 onClick={() => {
-                    onSelectData(record);
-                    setOpenModal(false);
+                    onSelectData({...record, type: 'Role' });
+                    setOpenRoleModal(false);
                 }}
             >
                 เลือก
@@ -47,28 +46,27 @@ const AddPositionModal = ({
     },
     {
       title: 'รหัส',
-      dataIndex: 'position_id',
+      dataIndex: 'role_id',
       align: 'center',
-      width: 30
+      width: 20
     },
     {
       title: 'ชื่อตำแหน่ง',
-      dataIndex: 'position_name',
+      dataIndex: 'role_name_th',
       width: 120
     },
   ];
 
-
-   const searchPositionTypeList = [
-    { value: 'position_id', label: 'รหัส' },
-    { value: 'position_name', label: 'ชื่อตำแหน่ง' },
+   const searchRoleTypeList = [
+    { value: 'role_id', label: 'รหัส' },
+    { value: 'role_name', label: 'ชื่อตำแหน่ง' },
   ]
 
   const loadData = useCallback(async (type, search, offset, limit) => {
-    console.log('loadData called with:', { type, search, offset, limit });
+    // console.log('loadData called with:', { type, search, offset, limit });
     setIsLoading(true);
 
-    let data = await getPosition({ 
+    let data = await getRole({ 
           type_search: type, 
           search: search, 
           offset: offset, 
@@ -92,7 +90,7 @@ const AddPositionModal = ({
       pageSize: limit,
       total: data?.total || 0
     });
-  }, [ getPosition]);
+  }, [ getRole]);
 
   // Reset function to force table reset
   const resetTable = useCallback(() => {
@@ -123,23 +121,23 @@ const AddPositionModal = ({
     <ModalComponent
       title={ 'เลือกตำแหน่ง' }
       visible={visible}
-      onCancel={() => setOpenPositionModal(false)}
+      onCancel={() => setOpenRoleModal(false)}
       width={800}
       footer={null}
     >
       <TableComponent
         key={`modal-${forceReset}-${visible ? 'open' : 'closed'}`}
-        columns={ positionColumns }
-        className="AddPositionModal"
+        columns={ roleColumns }
+        className="AddRolenModal"
         dataSource={dataTable}
-        pagination={{
-          current: pagination.current,
-          pageSize: pagination.pageSize,
-          total: pagination.total,
-          showSizeChanger: false
-        }}
+        // pagination={{
+        //   current: pagination.current,
+        //   pageSize: pagination.pageSize,
+        //   total: pagination.total,
+        //   showSizeChanger: true
+        // }}
         total={total}
-        searchList={ searchPositionTypeList }
+        searchList={ searchRoleTypeList }
         showSearch={true}
         showTypeSearch={true}
         onSearch={loadData}
@@ -153,7 +151,7 @@ const AddPositionModal = ({
                     <Btn.Close
                         style={{ marginLeft: 10, width: 110 }}
                         type='CLOSE'
-                        onClick={() => setOpenPositionModal(false)}
+                        onClick={() => setOpenRoleModal(false)}
                         label={'ปิด'}
                     />
                 </>
@@ -164,4 +162,4 @@ const AddPositionModal = ({
   );    
 };
 
-export default AddPositionModal;
+export default AddRoleModal;

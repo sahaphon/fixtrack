@@ -32,7 +32,7 @@ import { useTableHeight } from '../../utilities/useTableHeight'
 
 import AddDepartmentModal from './AddDepartmentModal'
 import AddDivisionModal from './AddDivisionModal'
-import AddPositionModal from './AddPositionModal'
+import AddRoleModal from './AddRoleModal'
 
 const tailLayout = {
   wrapperCol: { offset: 1, span: 24 },
@@ -66,11 +66,10 @@ const UserDetail = () => {
     { name: ['level'], value: 1 },
     { name: ['name'], value: '' },
     { name: ['emp_id'], value: '' },
-    { name: ['position'], value: '' },
     { name: ['dept', 'code'], value: '' },
     { name: ['dept', 'name'], value: '' },
-    { name: ['position', 'code'], value: '' },
-    { name: ['position', 'name'], value: '' },
+    { name: ['role', 'code'], value: '' },
+    { name: ['role', 'name'], value: '' },
   ]
 
   const [Valid, setValid] = useState('')
@@ -92,7 +91,7 @@ const UserDetail = () => {
 
   const [openModal, setOpenModal] = useState(false)
   const [openDivisionModal, setOpenDivisionModal] = useState(false)
-  const [openPositionModal, setOpenPositionModal] = useState(false)
+  const [openRoleModal, setOpenRoleModal] = useState(false)
   const [typeService, setTypeService] = useState('Department')
 
   const [bgColor, setBgColor] = useState('#7094db');
@@ -456,8 +455,8 @@ const UserDetail = () => {
         { name: ['dept', 'name'], value: data.department_name },
         { name: ['division', 'code'], value: data.division_id },
         { name: ['division', 'name'], value: data.division_name },
-        { name: ['position', 'code'], value: data.position_id },
-        { name: ['position', 'name'], value: data.position_name },
+        { name: ['role', 'code'], value: data.role_id },
+        { name: ['role', 'name'], value: data.role_name },
       ])
 
       setData(data.menu)
@@ -471,17 +470,16 @@ const UserDetail = () => {
 
     setLoadingTable(true)
     const data = await getUserDetail(id)
-    console.log('copy', data)
+    // console.log('copy', data)
     if (data !== undefined) {
       setFields([
         { name: ['level'], value: data.user_level === 'A' ? 2 : 1 },
         { name: ['name'], value: '' },
         { name: ['emp_id'], value: '' },
-        { name: ['position'], value: '' },
         { name: ['dept', 'code'], value: '' },
         { name: ['dept', 'name'], value: '' },
-        { name: ['division', 'code'], value: '' },
-        { name: ['division', 'name'], value: '' },
+        { name: ['role', 'code'], value: '' },
+        { name: ['role', 'name'], value: '' },
       ])
 
       setData(data.menu)
@@ -690,6 +688,31 @@ const UserDetail = () => {
 
   const handleSelectDataModal = (record) => {
       console.log('Selected record:', record);
+
+      switch (record.type) {
+        case 'Department':
+          setFields([
+            { name: ['dept', 'code'], value: record.dep_code },
+            { name: ['dept', 'name'], value: record.dep_name },
+          ])
+          // setOpenModal(false)
+          break;
+        case 'Division':
+          setFields([
+            { name: ['division', 'code'], value: record.division_id },
+            { name: ['division', 'name'], value: record.division_name },
+          ])
+          // setOpenDivisionModal(false)
+          break;
+        case 'Role':
+          console.log('Selecting Role:');
+          setFields([
+            { name: ['role', 'code'], value: record.role_id },
+            { name: ['role', 'name'], value: record.role_name_th },
+          ])
+          // setOpenRoleModal(false)
+          break;
+      }
   }
 
   return (
@@ -889,7 +912,7 @@ const UserDetail = () => {
         <Row className="mb-2">
           <Col md={12}></Col>
           <Col md={12}>
-            <Form.Item name="position" label="ระดับ/ตำแหน่ง" className="mb-0" {...tailLayout}>
+            <Form.Item name="role" label="ระดับ/ตำแหน่ง" className="mb-0" {...tailLayout}>
               <Space.Compact style={{ width: '100%' }}>
                   <Button
                     style={{ 
@@ -903,14 +926,14 @@ const UserDetail = () => {
                     onMouseEnter={(e) => e.target.style.backgroundColor = '#228b22'}
                     onMouseLeave={(e) => e.target.style.backgroundColor = 'green'}
                     onClick={() => 
-                      setOpenPositionModal(true)
+                      setOpenRoleModal(true)
                     }
                   >
                     <PlusOutlined />
                     เลือก
                   </Button>
                   <Form.Item 
-                    name={['position', 'code']} 
+                    name={['role', 'code']} 
                     noStyle
                     rules={[
                       {
@@ -929,7 +952,7 @@ const UserDetail = () => {
                       autoComplete={`off`}
                     />
                   </Form.Item>
-                  <Form.Item name={['position', 'name']} noStyle>
+                  <Form.Item name={['role', 'name']} noStyle>
                     <Input
                       disabled
                       style={{ 
@@ -1043,10 +1066,10 @@ const UserDetail = () => {
           />
       )
       }
-      { openPositionModal && (
-          <AddPositionModal
-            visible={openPositionModal}
-            setOpenPositionModal={setOpenPositionModal}
+      { openRoleModal && (
+          <AddRoleModal
+            visible={openRoleModal}
+            setOpenRoleModal={setOpenRoleModal}
             onSelectData={handleSelectDataModal}
           />
        )

@@ -36,7 +36,7 @@ const AddDepartmentModal = ({
                 size="small"
                 icon={<CheckOutlined />}
                 onClick={() => {
-                    onSelectData(record);
+                    onSelectData({...record, type: 'Department'});
                     setOpenModal(false);
                 }}
             >
