@@ -255,15 +255,15 @@ const RepairTable = ({ tabFilter = {}, tabType = '', setBadge = () => {} }) => {
         <Card style={{ borderRadius: 3 }}>
             <TableComponentForwardRef
                 ref={tableRef}
-                // MenuBtn={() => (
-                //     <Row style={{ marginLeft: '5px' }}>
-                //         <Btn.Add
-                //             onClick={() => {
-                //                 navigate(`/CN/${EMenuType.ADD}`)
-                //             }}
-                //         />
-                //     </Row>
-                // )}
+                MenuBtn={() => (
+                    <Row style={{ marginLeft: '3px' }}>
+                        <Btn.Add
+                            onClick={() => {
+                                navigate(`/repair/${EMenuType.ADD}`)
+                            }}
+                        />
+                    </Row>
+                )}
                 loading={loading}
                 className={'NTables_' + tabType}
                 total={total}
