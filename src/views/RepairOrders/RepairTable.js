@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, use } from 'react'
 import { Card, Tag, Row, Col } from 'antd'
 import TableComponentForwardRef from '../../components/Table/TableComponentForwardRef'
 
-import SelectComponent from '../ReuseComponent/SelectorIndex'
+// import SelectComponent from '../ReuseComponent/SelectorIndex'
 import { createMenuItemFnc, EMenuType } from '../../components/Table/CreateTableMenu'
 import { 
     alertConfirm, 
@@ -14,36 +14,38 @@ import { useNavigate } from 'react-router-dom'
 import Btn from '../../components/Button/BtnComponent'
 import { Icons } from '../../components/icons/AntIcons'
 
-import { ServiceCN } from '../../service/ServiceCN'
+import { ServiceRepair } from '../../service/ServiceRepair'
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import { DATE_FORMAT } from '../../config'
 import numeral from 'numeral'
 
-// import { bufferToPDF } from '../../utilities/BufferToPDF'
+// Extend dayjs with UTC plugin
+dayjs.extend(utc)
 
-const CNTable = ({ tabFilter = {}, tabType = '', setBadge = () => {} }) => {
+const RepairTable = ({ tabFilter = {}, tabType = '', setBadge = () => {} }) => {
     const navigate = useNavigate()
-    const { getAllCN, deleteCN } = ServiceCN()
+    const { getAllRepairOrders } = ServiceRepair()
 
     const tableRef = useRef()
     const [dataTable, setDataTable] = useState([])
     const [total, setTotal] = useState(0)
     const [loading, setLoading] = useState(false)
 
-    const [PrintCNModalVisible, setPrintCNModalVisible] = useState(false)
+    // const [PrintCNModalVisible, setPrintCNModalVisible] = useState(false)
     const [selectedRecord, setSelectedRecord] = useState({})
 
     const handleLoadData = async (typeSearch, textSearch, page, pageSize, filter) => {
         try {
             setLoading(true)
-            const data = await getAllCN({
+            const data = await getAllRepairOrders({
                 limit: pageSize,
                 offset: page,
                 search: textSearch,
                 type_search: typeSearch,
                 filter: { ...filter, ...tabFilter },
             })
-            console.log('data cn table : ', data)
+            console.log('data repair : ', data)
             if (data) {
                 setDataTable(data.result.map((item, i) => ({ ...item, key: i })))
                 setBadge((state) => ({ ...state, [tabType]: data.total }))
@@ -59,138 +61,160 @@ const CNTable = ({ tabFilter = {}, tabType = '', setBadge = () => {} }) => {
         {
             title: <b>สถานะ</b>,
             dataIndex: 'status',
-            width: 60,
+            width: 90,
             align: 'center',
             fixed: 'left',
             render: (text) => {
-                if (text === 'C') return <Tag color="red">ยกเลิก</Tag>
-                return text
+                if (text === 'PENDING') return (
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                        <Tag style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            margin: 0
+                        }} color="yellow">รอดำเนินการ</Tag>
+                    </div>
+                )
+                return (
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                        {text}
+                    </div>
+                )
             },
         },
         {
-            title: <b>โอนข้อมูล</b>,
-            width: 60,
-            dataIndex: 'shoeadda_docno',
-            align: 'center',
-            fixed: 'left',
-            render: (text, record) => (text ? <Icons.IconIsActive /> : <Icons.IconNonActive />),
-        },
-        {
-            title: <b>บัญชี</b>,
-            dataIndex: 'confirm',
-            align: 'center',
-            width: 60,
-            fixed: 'left',
-            render: (text, record) => (text ? <Icons.IconIsActive /> : <Icons.IconNonActive />),
-        },
-        {
-            title: <b>Type</b>,
-            dataIndex: 'company',
+            title: <b>อนุมัติ</b>,
+            dataIndex: 'approval',
             width: 60,
             align: 'center',
             fixed: 'left',
+            render: (text, record) => (text === "WAITING" ? <Icons.IconIsActive /> : <Icons.IconHourglass />),
         },
         {
-            title: <b>เลขที่ CN</b>,
-            dataIndex: 'docno',
-            width: 120,
+            title: <b>เลขที่ซ่อม</b>,
+            width: 80,
+            dataIndex: 'repair_no',
             align: 'center',
             fixed: 'left',
         },
         {
             title: <b>วันที่</b>,
             dataIndex: 'date',
-            width: 100,
             align: 'center',
+            width: 100,
             fixed: 'left',
             render: (text) => (text ? dayjs(text).utc().format(DATE_FORMAT.DISPLAY) : ''),
         },
         {
-            title: <b>ครบกำหนด</b>,
-            dataIndex: 'duedate',
-            width: 100,
+            title: <b>ประเภทอุปกรณ์</b>,
+            dataIndex: 'vehicle_name',
+            width: 120,
             align: 'center',
             fixed: 'left',
-            render: (text) => (text ? dayjs(text).utc().format(DATE_FORMAT.DISPLAY) : ''),
         },
         {
-            title: <b>อ้างถึง</b>,
-            dataIndex: 'refno',
-            width: 120,
-            align: 'center',
-        },
-        {
-            title: <b>ใบรับคืน</b>,
-            dataIndex: 'pono',
-            width: 120,
-            align: 'center',
-        },
-        {
-            title: <b>ยอดเดิม</b>,
-            dataIndex: 'old_amt',
-            width: 120,
-            render: (text) => numeral(text).format('0,0.00'),
-            align: 'right',
-        },
-        {
-            title: <b>ยอดใหม่</b>,
-            dataIndex: 'new_amt',
-            width: 120,
-            render: (text) => numeral(text).format('0,0.00'),
-            align: 'right',
-        },
-        {
-            title: <b>ผลต่าง</b>,
-            dataIndex: 'net_amt',
-            width: 120,
-            render: (text) => numeral(text).format('0,0.00'),
-            align: 'right',
-        },
-        {
-            title: <b>ภาษี</b>,
-            dataIndex: 'tax_amt',
-            width: 100,
-            render: (text) => numeral(text).format('0,0.00'),
-            align: 'right',
-        },
-        {
-            title: <b>ยอดรวม</b>,
-            dataIndex: 'total',
-            width: 120,
-            render: (text) => numeral(text).format('0,0.00'),
-            align: 'right',
-        },
-        {
-            title: <b>รหัสผู้ซื้อ</b>,
-            dataIndex: 'customer_id',
-            width: 80,
-            align: 'center',
-        },
-        {
-            title: <b>ผู้ซื้อ</b>,
-            dataIndex: 'customer_name',
-            width: 400,
+            title: <b>รหัสทรัพย์สิน</b>,
+            dataIndex: 'asset_no',
+            width: 240,
             align: 'left',
+            fixed: 'left',
+            ellipsis: {
+                showTitle: false,
+            },
+            render: (text) => (
+                <span 
+                    title={text}
+                    style={{
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        display: 'block'
+                    }}
+                >
+                    {text}
+                </span>
+            ),
         },
+        {
+            title: <b>รายละเอียดทรัพย์สิน</b>,
+            dataIndex: 'asset_name',
+            width: 240,
+            align: 'left',
+            fixed: 'left',
+            ellipsis: {
+                showTitle: false,
+            },
+            render: (text) => (
+                <span 
+                    title={text}
+                    style={{
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        display: 'block'
+                    }}
+                >
+                    {text}
+                </span>
+            ),
+        },
+        {
+            title: <b>ผู้ประสานงาน/เบอร์ติดต่อ</b>,
+            dataIndex: 'contact_name',
+            width: 260,
+            align: 'center',
+        },
+        {
+            title: <b>ผู้อนุมัติ</b>,
+            dataIndex: 'approved',
+            width: 180,
+            align: 'center',
+        },
+        {
+            title: <b>ผู้บันทึก</b>,
+            dataIndex: 'created_by',
+            width: 120,
+            align: 'center',
+        },
+        {
+            title: <b>วันที่บันทึก</b>,
+            dataIndex: 'created_date',
+            width: 120,
+            render: (text) => (text ? dayjs(text).utc().format(DATE_FORMAT.DISPLAY) : ''),
+            align: 'center',
+        },
+        {
+            title: <b>ผู้แก้ไข</b>,
+            dataIndex: 'edit_by',
+            width: 120,
+            align: 'center',
+        },
+        {
+            title: <b>วันที่แก้ไข</b>,
+            dataIndex: 'edit_date',
+            width: 120,
+            render: (text) => (text ? dayjs(text).utc().format(DATE_FORMAT.DISPLAY) : ''),
+            align: 'center',
+        }
     ]
 
-    const handleDeleteCN = (record) => {
-        const params = {    
-            docno: record.docno,
-            rtv_id: record.pono,
-        }
+    // const handleDeleteCN = (record) => {
+    //     const params = {    
+    //         docno: record.docno,
+    //         rtv_id: record.pono,
+    //     }
 
-         alertConfirm({
-                 alert_Title: `ต้องการลบใบลดหนี้ ${record.docno} ใช่หรือไม่?`,
-                   onConfirm: async () => {
-                      return deleteCN(params)
-                },
-              success: {
-                      success_title: 'ลบใบลดหนี้สำเร็จ',
-                     callback: () => handleLoadData(),
-                   },
-      })
-    }
+    //      alertConfirm({
+    //              alert_Title: `ต้องการลบใบลดหนี้ ${record.docno} ใช่หรือไม่?`,
+    //                onConfirm: async () => {
+    //                   return deleteCN(params)
+    //             },
+    //           success: {
+    //                   success_title: 'ลบใบลดหนี้สำเร็จ',
+    //                  callback: () => handleLoadData(),
+    //                },
+    //   })
+    // }
 
     const _menuItems = createMenuItemFnc([
         {
@@ -248,16 +272,12 @@ const CNTable = ({ tabFilter = {}, tabType = '', setBadge = () => {} }) => {
                 className="n-tableComponent"
                 searchList={[
                     {
-                        label: 'เลขที่ CN',
-                        value: 'docno',
+                        label: 'เลขที่ใบแจ้งซ่อม',
+                        value: 'repair_no',
                     },
                     {
-                        label: 'รหัสลูกค้า',
-                        value: 'customer_id',
-                    },
-                    {
-                        label: 'ลูกค้า',
-                        value: 'customer_name',
+                        label: 'วันที่แจ้งซ่อม',
+                        value: 'date',
                     },
                 ]}
                 {..._menuItems}
@@ -273,4 +293,4 @@ const CNTable = ({ tabFilter = {}, tabType = '', setBadge = () => {} }) => {
     )
 }
 
-export default CNTable
+export default RepairTable

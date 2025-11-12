@@ -6,6 +6,8 @@ const UserDetail = React.lazy(() => import('./views/User/UserDetail'))
 const FileSystem = React.lazy(() => import('./views/FileSystem/FileSystem'))
 const FileSystemDetail = React.lazy(() => import('./views/FileSystem/FileSystemDetail'))
 
+const RepairContainer = React.lazy(() => import('./views/RepairOrders/RepairContainer'))
+
 const routes = [
   { path: '/', name: 'Home', element: Home, menu: 'home' },
   { path: '/user', name: 'ข้อมูลผู้ใช้งาน', element: User, exact: true, menu: 'M001' },
@@ -65,7 +67,14 @@ const routes = [
     exact: true,
     menu: 'M001',
     typeForm: 'view',
-  }
+  },
+  {
+        path: '/repair',
+        name: 'ใบสั่งซ่อม',
+        element: RepairContainer,
+        exact: true,
+        menu: 'M003',
+    },
 ]
 
 export default routes

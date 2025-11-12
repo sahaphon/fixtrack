@@ -833,7 +833,7 @@ const UserDetail = () => {
                   <Input
                     style={{
                       width: '15%',
-                      color: 'black',
+                      color: 'blue',
                     }}
                     disabled={type_page === 'view' ? true : false}
                     placeholder="รหัส"
@@ -845,7 +845,7 @@ const UserDetail = () => {
                   <Input
                     style={{
                       width: '70%',
-                      color: 'black',
+                      color: 'blue',
                     }}
                     disabled
                     placeholder="ชื่อแผนก"
@@ -887,7 +887,7 @@ const UserDetail = () => {
                   <Input
                     style={{
                       width: '15%',
-                      color: 'black',
+                      color: 'blue',
                     }}
                     disabled={type_page === 'view' ? true : false}
                     placeholder="รหัส"
@@ -946,7 +946,7 @@ const UserDetail = () => {
                       disabled={type_page === 'view' ? true : false}
                       style={{ 
                         width: '15%',
-                        color: 'black'
+                        color: 'blue'
                        }}
                       placeholder="รหัส"
                       autoComplete={`off`}

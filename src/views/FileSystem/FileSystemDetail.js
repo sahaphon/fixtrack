@@ -66,8 +66,8 @@ const FileSystemDetail = () => {
     },
     {
       title: () => <div className="font-weight-bold">User Login</div>,
-      dataIndex: 'emp_id',
-      key: 'emp_id',
+      dataIndex: 'user_id',
+      key: 'user_id',
       width: 100,
       align: 'left',
       render: (text, record, index) => text,
@@ -374,6 +374,7 @@ const FileSystemDetail = () => {
   const defaultUsers = async () => {
     setLoadingTable(true)
     let data = await getAllUser()
+    // console.log('data getAllUser', data)
     if (data !== undefined) {
       data = Array.isArray(data) ? data : [data]
       const result = data.map((value) => {
@@ -390,7 +391,7 @@ const FileSystemDetail = () => {
           action_calculate: false,
           action_confirm: false,
           action_cancel: false,
-          full_name: value.name_th + ' ' + value.surname_th,
+          full_name: value.full_name,
         }
       })
       setData(result)
@@ -409,7 +410,7 @@ const FileSystemDetail = () => {
       setData(
         data.users.map((item) => ({
           ...item,
-          full_name: item.name_eng + '  ' + item.surname_eng,
+          full_name: item.full_name,
         })),
       )
     }

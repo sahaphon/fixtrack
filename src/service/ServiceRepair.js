@@ -4,8 +4,8 @@ import { MASTER } from '../config'
 
 const ServiceRepair = () => {
 
-  const getRepairOrders = async ({ limit, offset, type_search, search, filters }) => {
-    const res = await fetch('POST', '/repair/orders/', { limit, offset, type_search, search, ...filters })
+  const getAllRepairOrders = async ({ limit, offset, type_search, search, filter }) => {
+    const res = await fetch('POST', '/repair/', { limit, offset, type_search, search, filter })
     return res
   }
 
@@ -24,7 +24,7 @@ const ServiceRepair = () => {
     }
 
   return {
-    getRepairOrders,
+    getAllRepairOrders,
     getRepairOrderDetail,
     getBadgeCount,
   }

@@ -20,9 +20,6 @@ const AddRoleModal = ({
   const [dataTable, setDataTable] = useState([])
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [forceReset, setForceReset] = useState(0);
-  const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
 
   const roleColumns = [
      {
@@ -83,39 +80,7 @@ const AddRoleModal = ({
         setTotal(0);
     }
     setIsLoading(false);
-    
-    // Update pagination state
-    setPagination({
-      current: Math.floor(offset / limit) + 1,
-      pageSize: limit,
-      total: data?.total || 0
-    });
   }, [ getRole]);
-
-  // Reset function to force table reset
-  const resetTable = useCallback(() => {
-    setDataTable([]);
-    setTotal(0);
-    setCurrentPage(1);
-    setPagination({ current: 1, pageSize: 10, total: 0 });
-    setForceReset(prev => prev + 1);
-  }, []);
-
-  useEffect(() => {
-    // Fetch items from API or define them statically
-
-    if (visible) {
-        // Reset table state and load from offset 0
-        resetTable();
-        setTimeout(() => {
-          let defaultSearchType = 'position_id'
-          console.log('Loading initial data with searchType:', defaultSearchType);
-          loadData(defaultSearchType, '', 0, 10);
-        }, 200);
-    }
-   
-  }, [visible]);
-
 
   return (
     <ModalComponent
@@ -126,16 +91,10 @@ const AddRoleModal = ({
       footer={null}
     >
       <TableComponent
-        key={`modal-${forceReset}-${visible ? 'open' : 'closed'}`}
+        key={`key`}
         columns={ roleColumns }
         className="AddRolenModal"
         dataSource={dataTable}
-        // pagination={{
-        //   current: pagination.current,
-        //   pageSize: pagination.pageSize,
-        //   total: pagination.total,
-        //   showSizeChanger: true
-        // }}
         total={total}
         searchList={ searchRoleTypeList }
         showSearch={true}

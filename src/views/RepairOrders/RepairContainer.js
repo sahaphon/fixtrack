@@ -1,14 +1,15 @@
 import { Badge, Card, Tabs } from 'antd'
 import React, { useState, useEffect } from 'react'
 
-// import CNTable from './CNTable'
+import RepairTable from './RepairTable'
 import TabsComponent from '../../components/Tabs/TabsComponent'
 import { ServiceRepair } from '../../service/ServiceRepair'
 
-const CNContainer = () => {
+const RepairContainer = () => {
+
     const { getBadgeCount } = ServiceRepair()
     const [badge, setBadge] = useState({
-        cn: 0,
+        confirmed: 0,
         wait_confirm: 0,
         all: 0,
     })
@@ -40,11 +41,11 @@ const CNContainer = () => {
                                รออนุมัติ
                             </Badge>
                         ),
-                        // children: <CNTable 
-                        //     tabType={'wait_confirm'}
-                        //     tabFilter={{ status_cn: ['wait_confirm'], cancel: [false] }}
-                        //     // setBadge={setBadge}
-                        // />,
+                        children: <RepairTable
+                            tabType={'wait_confirm'}
+                            tabFilter={{ status_repair: ['wait_confirm'] }}
+                            // setBadge={setBadge}
+                        />,
                     },
                     {
                         key: '2',
@@ -58,11 +59,11 @@ const CNContainer = () => {
                                 อนุมัติแล้ว
                             </Badge>
                         ),
-                        // children: <CNTable 
-                        //     tabType={'confirmed'}
-                        //     tabFilter={{ status_cn: ['confirmed'], cancel: [false] }}
-                        //     // setBadge={setBadge}
-                        // />,
+                        children: <RepairTable 
+                            tabType={'confirmed'}
+                            tabFilter={{ status_repair: ['confirmed']}}
+                            // setBadge={setBadge}
+                        />,
                     },
                     {
                         label: (
@@ -76,10 +77,10 @@ const CNContainer = () => {
                             </Badge>
                         ),
                         key: '3',
-                        // children: <CNTable 
-                        //    tabType={'all'}
-                        // //    setBadge={setBadge}
-                        // />,
+                        children: <RepairTable 
+                           tabType={'all'}
+                        //    setBadge={setBadge}
+                        />,
                     },
                 ]}
                 defaultActiveKey="1"
@@ -88,4 +89,4 @@ const CNContainer = () => {
     )
 }
 
-export default CNContainer
+export default RepairContainer
