@@ -88,7 +88,7 @@ const RepairTable = ({ tabFilter = {}, tabType = '', setBadge = () => {} }) => {
             width: 60,
             align: 'center',
             fixed: 'left',
-            render: (text, record) => (text === "WAITING" ? <Icons.IconIsActive /> : <Icons.IconHourglass />),
+            render: (text, record) => (text === "WAITING" ? <Icons.IconIsActive /> : <Icons.IconClockCircle />),
         },
         {
             title: <b>เลขที่ซ่อม</b>,

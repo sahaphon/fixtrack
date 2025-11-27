@@ -63,8 +63,8 @@ const App = () => {
                                       })
                             dispatch({ type: 'set', helmet: route.name })
 
-                            console.log('permission for route', route.path, permission)
-                            console.log('preload for route', route.menu, preload)
+                            // console.log('permission for route', route.path, permission)
+                            // console.log('preload for route', route.menu, preload)
                             if (permission) {
                                 if (!permission.open) {
                                     alertPermissionDeny(() => {

@@ -60,7 +60,7 @@ const getPermission = async (menuID) => {
     menu_id: menuID,
   }
   const data = await fetch('post', '/users/permission', params)
-  console.log('perm: ', data)
+  // console.log('perm: ', data)
   if (!data) {
     return {
       open: false,
